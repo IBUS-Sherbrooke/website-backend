@@ -1,4 +1,9 @@
 'use strict';
 const {Model, DataTypes} = require('sequelize');
 
-//TODO
+module.exports = (sequelize) =>{
+	class PrintRequests extends Model{}
+	//TODO
+
+	return PrintRequests
+}

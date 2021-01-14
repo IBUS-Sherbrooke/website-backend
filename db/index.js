@@ -17,7 +17,7 @@ const sequelize = new Sequelize(config.db.database,
 
 /* init models
 ******************************************************************/
-db.sequelize = sequelize;
-db.PrintRequest = require('./printRequest')(sequelize);
+db.sequelize = sequelize
+db.PrintRequests = require('./printRequest')(sequelize)
 
 module.exports = db;

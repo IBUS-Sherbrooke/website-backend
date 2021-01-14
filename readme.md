@@ -26,6 +26,14 @@ The following librairies will be installed:
 ---
 ## Project Structure
 
+- **routes**: Definition of api routes 
+- **controllers**: Controls the workflow of the requests and response by calling services and validators, 1 per route
+- **services**: Executer of the request, 1 per route
+- **validators**: Validates the request before execution
+- **configs**: Simple global config objects. Reads the .env attributes
+- **db**: Database model and connection (TODO)
+- **.env**: Environnment variables
+- **index.js**: Main app entry point
 
 ## Usage example
 
