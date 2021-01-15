@@ -8,7 +8,6 @@ Based on [this blog post](https://blog.dbi-services.com/build-api-backend-server
    
 Run the following command the in project environnement to install the required librairies 
 ```
-npm install -g typescript
 npm install 
 ```
 The following librairies will be installed:
@@ -25,6 +24,17 @@ The following librairies will be installed:
 - **nodemon**
 	>Restarts the server automatically on each file changes
 ---
+## Building and Debugging
+To debug, run (nodemon)
+```
+npm start 
+```
+
+To build, run 
+```
+tsc 
+```
+
 ## Project Structure
 
 - **routes**: Definition of api routes 
@@ -38,27 +48,27 @@ The following librairies will be installed:
 
 ## Usage example
 
-**GetAll:**
+`GetAll`:
 ```
 GET
 http://[server adress]:[port]/api/printRequests
 ```
 
-**Update:**
+`Update`:
 ```
 PUT
 http://[server adress]:[port]/api/printRequests/[id]
 body: {"name": "potato"}
 ```
 
-**AddNew:**
+`AddNew`:
 ```
 POST
 http://[server adress]:[port]/api/printRequests/[id]
 body: {"name": "potato", "data": ... }
 ```
 
-**Delete:**
+`Delete`:
 ```
 DELETE
 http://[server adress]:[port]/api/printRequests/[id]
