@@ -11,10 +11,9 @@ export const printRequestController  = {
     async getPrintRequests(req:any, res:any) {
         try {
             let printRequests = await printRequestService.getPrintRequests()
-            
             res.send(printRequests)
         } catch (e) {
-            res.send('Internal server error')
+            res.send(`getPrintRequests Failed : ${e}`)
         }
     },
  
@@ -33,7 +32,7 @@ export const printRequestController  = {
                 res.send(createdPrintRequest)
             }
         } catch (e) {
-            res.send('Internal server error')
+            res.send(`addPrintRequests Failed : ${e}`)
         }
     },
  
@@ -52,7 +51,7 @@ export const printRequestController  = {
                 res.send(updatePrintRequest)
             }
         } catch (e) {
-            res.send('Internal server error')
+            res.send(`updatePrintRequest Failed : ${e}`)
         }
     },
  
@@ -62,7 +61,7 @@ export const printRequestController  = {
             let deletePrintRequest = await printRequestService.deletePrintRequest(id)
             res.send(deletePrintRequest)
         } catch (e) {
-            res.send('Internal server error')
+            res.send(`deletePrintRequest Failed : ${e}`)
         }
     }
 }
