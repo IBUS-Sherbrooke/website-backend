@@ -8,6 +8,7 @@ Based on [this blog post](https://blog.dbi-services.com/build-api-backend-server
    
 Run the following command the in project environnement to install the required librairies 
 ```
+npm install -g typescript
 npm install 
 ```
 The following librairies will be installed:

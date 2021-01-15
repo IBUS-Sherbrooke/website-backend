@@ -1,13 +1,17 @@
-const printRequestCreate = require('../validators/printRequestCreate')
-const printRequestUpdate = require('../validators/printRequestUpdate')
-const printRequestService = require('../services/printRequest.service')
+import { expression } from "joi"
 
-module.exports = {
+import {printRequestCreate} from '../validators/printRequestCreate'
+import {printRequestUpdate} from '../validators/printRequestUpdate'
+import {printRequestService} from '../services/printRequest.service'
+
+
+export const printRequestController  = {
  
     /* get All printRequests */
-    async getPrintRequests(req, res) {
+    async getPrintRequests(req:any, res:any) {
         try {
             let printRequests = await printRequestService.getPrintRequests()
+            
             res.send(printRequests)
         } catch (e) {
             res.send('Internal server error')
@@ -15,7 +19,7 @@ module.exports = {
     },
  
     /* add printRequest */
-    async addPrintRequest(req, res) {
+    async addPrintRequest(req:any, res:any) {
         try {
             const { body } = req
  
@@ -33,7 +37,7 @@ module.exports = {
         }
     },
  
-    async updatePrintRequestById(req, res) {
+    async updatePrintRequestById(req:any, res:any) {
         try {
             const { body } = req
             const { id } = req.params
@@ -42,7 +46,7 @@ module.exports = {
             let inputIsValid = await printRequestUpdate.validate(body)
  
             if(inputIsValid.error){
-                res.send(inputIsValid.error.message[0].details)
+                res.send(inputIsValid.error.details[0].message)
             } else {
                 let updatePrintRequest = await printRequestService.updatePrintRequest(id, body)
                 res.send(updatePrintRequest)
@@ -52,7 +56,7 @@ module.exports = {
         }
     },
  
-    async deletePrintRequestById(req, res) {
+    async deletePrintRequestById(req:any, res:any) {
         try {
             const { id } = req.params
             let deletePrintRequest = await printRequestService.deletePrintRequest(id)
@@ -60,5 +64,5 @@ module.exports = {
         } catch (e) {
             res.send('Internal server error')
         }
-    },
+    }
 }
