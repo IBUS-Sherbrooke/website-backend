@@ -40,6 +40,3 @@ export function PrintRequestInit(sequelize:Sequelize) {
 	return PrintRequests
 }
 
-//module.exports = (sequelize: Sequelize) =>{
-
-//}
