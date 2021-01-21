@@ -5,6 +5,8 @@ Based on [this blog post](https://blog.dbi-services.com/build-api-backend-server
 ## Prerequisites
 
  - [**nodejs**](https://nodejs.org/en/) latest version
+ - [**Mysql workbench community**](https://dev.mysql.com/downloads/workbench/) (optional, only for creating a local database)
+ - [**Mysql Server community**](https://dev.mysql.com/downloads/mysql/) (optional, only for hosting a local database)
    
 Run the following command the in project environnement to install the required librairies 
 ```
@@ -17,12 +19,14 @@ The following librairies will be installed:
   	>Reads from .env file and adds into process variable which is readable globally
 - **sequelize**
 	>Sequelize is a promise-based Node.js ORM for Postgres, MySQL, MariaDB, SQLite and Microsoft SQL Server. It features solid transaction support, relations, eager and lazy loading, read replication and more.
-- **pg**
-	>NodeJS PostgreSQL connection “driver”
+- **mysql2**
+	>NodeJS Mysql connection driver
 - **joi**
 	>For validation
 - **nodemon**
 	>Restarts the server automatically on each file changes
+- **Typescript and ts-node**
+
 ---
 ## Building and Debugging
 To debug, run (nodemon)
@@ -47,11 +51,24 @@ tsc
 - **index.js**: Main app entry point
 
 ## Usage example
+Default environnement variable are in .env 
 
 `GetAll`:
 ```
 GET
 http://[server adress]:[port]/api/printRequests
+
+GET
+http://[server adress]:[port]/api/printRequestsHistory
+```
+
+`Current mocks`:
+```
+GET
+http://[server adress]:[port]/api/printRequests/mock
+
+GET
+http://[server adress]:[port]/api/printRequestsHistory/mock
 ```
 
 `Update`:
@@ -73,6 +90,10 @@ body: {"name": "potato", "data": ... }
 DELETE
 http://[server adress]:[port]/api/printRequests/[id]
 ```
+## DataBase
+The database creation script is [ibus_test_script.sql](ibus_test_script.sql)
+
+A tutorial on how to create the database will be provided shortly... or not.
 
 ## To be completed...
 ...
