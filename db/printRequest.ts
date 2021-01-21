@@ -31,7 +31,6 @@ export function PrintRequestInit(sequelize:Sequelize) {
 		},
 		{
 			tableName:'printRequests',
-			schema: 'data',
 			createdAt: 'created_at',
 			updatedAt: 'updated_at',
 			sequelize
