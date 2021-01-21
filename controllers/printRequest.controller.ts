@@ -16,6 +16,16 @@ export const printRequestController  = {
             res.send(`getPrintRequests Failed : ${e}`)
         }
     },
+
+    /* get All printRequests MOCK (to delete) */
+    async getPrintRequestsMock(req:any, res:any) {
+        try {
+            let printRequests = await printRequestService.getPrintRequestsMock()
+            res.send(printRequests)
+        } catch (e) {
+            res.send(`getPrintRequests Failed : ${e}`)
+        }
+    },
  
     /* add printRequest */
     async addPrintRequest(req:any, res:any) {

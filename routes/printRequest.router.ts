@@ -7,4 +7,7 @@ printRequestRouter.post('/',printRequestController.addPrintRequest)
 printRequestRouter.put('/:id',printRequestController.updatePrintRequestById)
 printRequestRouter.delete('/:id',printRequestController.deletePrintRequestById)
 
+//fake request for testing
+printRequestRouter.get('/mock',printRequestController.getPrintRequestsMock)
+
 export {printRequestRouter}

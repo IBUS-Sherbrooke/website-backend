@@ -9,6 +9,15 @@ export const printRequestService = {
 			throw e
 		}
 	},
+
+	async getPrintRequestsMock() {
+		try{
+			let printRequests = "allo"
+			return printRequests
+		} catch(e) {
+			throw e
+		}
+	},
 	
 	async createPrintRequest(printRequeststr:string){
 		try{
