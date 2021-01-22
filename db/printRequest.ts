@@ -4,6 +4,8 @@ import {Model, DataTypes, Sequelize} from 'sequelize'
 export interface PrintRequestsAttributes {
 	id:number;
 	name:string;
+	filepath:string;
+	description?:string;
 }
 
 export function PrintRequestInit(sequelize:Sequelize) {
@@ -11,6 +13,8 @@ export function PrintRequestInit(sequelize:Sequelize) {
 	implements PrintRequestsAttributes{
 		public id!:number;
 		public name!:string;
+		public filepath!:string;
+		public description?:string;
 		// timestamps
 		public readonly createdAt!: Date;
 		public readonly updatedAt!: Date;
@@ -27,6 +31,14 @@ export function PrintRequestInit(sequelize:Sequelize) {
 			name: {
 				type: DataTypes.STRING(255),
 				allowNull:false
+			},
+			filepath: {
+				type: DataTypes.STRING(255),
+				allowNull:false
+			},
+			description: {
+				type: DataTypes.STRING(255),
+				allowNull:true
 			}
 		},
 		{

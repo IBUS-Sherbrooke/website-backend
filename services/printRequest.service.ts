@@ -31,6 +31,7 @@ export const printRequestService = {
 
 	async updatePrintRequest(reqid:number, printRequeststr:string){
 		try{
+			console.log(printRequeststr)
 			let printRequest:PrintRequestsAttributes = JSON.parse(printRequeststr);
 			let updatedPrintRequest = await db.PrintRequests.update(printRequest, {where: {id: reqid}})
 			return updatedPrintRequest

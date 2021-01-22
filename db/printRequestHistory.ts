@@ -14,6 +14,14 @@ export function PrintRequestHistoryInit(sequelize:Sequelize) {
 			name: {
 				type: DataTypes.STRING(255),
 				allowNull:false
+			},
+			filepath: {
+				type: DataTypes.STRING(255),
+				allowNull:false
+			},
+			description: {
+				type: DataTypes.STRING(255),
+				allowNull:true
 			}
 		},
 		{

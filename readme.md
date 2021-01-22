@@ -75,14 +75,32 @@ http://[server adress]:[port]/api/printRequestsHistory/mock
 ```
 PUT
 http://[server adress]:[port]/api/printRequests/[id]
-body: {"name": "potato"}
+body: {"name": "potato", "print_data": *file* ...}
 ```
 
 `AddNew`:
 ```
-POST
-http://[server adress]:[port]/api/printRequests/[id]
-body: {"name": "potato", "data": ... }
+POST /api/printRequests HTTP/1.1
+Host: localhost:2000
+Content-Length: 458
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="print_data"; filename="/C:/Gegi/S7/Projet/Databases/ibus_test_script.sql"
+Content-Type: <Content-Type header here>
+
+(data)
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="name"
+Content-Type: application/json
+
+potato
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="description"
+
+desc test
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+
 ```
 
 `Delete`:

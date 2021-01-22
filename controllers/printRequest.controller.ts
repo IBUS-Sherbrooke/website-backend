@@ -30,10 +30,14 @@ export const printRequestController  = {
     /* add printRequest */
     async addPrintRequest(req:any, res:any) {
         try {
-            const { body } = req
- 
+            if(!req.file){
+                res.send(`addPrintRequests Failed : missing print data file`)
+                return
+            }
+            req.body.filepath = req.file.destination + req.file.filename
+            const body:string = JSON.stringify(req.body)
             /* validate input */
-            let inputIsValid = await printRequestCreate.validate(body)
+            let inputIsValid = await printRequestCreate.validate(req.body)
  
             if(inputIsValid.error){
                 res.send(inputIsValid.error.details[0].message)
@@ -48,12 +52,16 @@ export const printRequestController  = {
  
     async updatePrintRequestById(req:any, res:any) {
         try {
-            const { body } = req
-            const { id } = req.params
- 
+            if(req.file){
+                req.body.filepath = req.file.destination + req.file.filename
+            }
+            
+            const body:string = JSON.stringify(req.body)
+            const id:number = req.params.id
+            
             /* validate input */
-            let inputIsValid = await printRequestUpdate.validate(body)
- 
+            let inputIsValid = await printRequestUpdate.validate(req.body)
+            console.log(id)
             if(inputIsValid.error){
                 res.send(inputIsValid.error.details[0].message)
             } else {
