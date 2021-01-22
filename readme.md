@@ -51,7 +51,9 @@ tsc
 - **index.js**: Main app entry point
 
 ## Usage example
-Default environnement variable are in .env 
+Default environnement variable are in .env
+
+You can test with [**Postman**](https://www.postman.com/downloads/)
 
 `GetAll`:
 ```
