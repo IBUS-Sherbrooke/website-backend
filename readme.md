@@ -51,9 +51,12 @@ tsc
 - **index.js**: Main app entry point
 
 ## Usage example
+
 Default environnement variable are in .env
 
 You can test with [**Postman**](https://www.postman.com/downloads/)
+
+Postman request example in [IBUS_printRequest.postman_collection.json](IBUS_printRequest.postman_collection.json)
 
 `GetAll`:
 ```
@@ -111,9 +114,7 @@ DELETE
 http://[server adress]:[port]/api/printRequests/[id]
 ```
 ## DataBase
-The database creation script is [ibus_test_script.sql](ibus_test_script.sql)
-
-A tutorial on how to create the database will be provided shortly... or not.
+Take a look at [the database setup](https://github.com/IBUS-Sherbrooke/website-database) repo. 
 
 ## To be completed...
 ...
