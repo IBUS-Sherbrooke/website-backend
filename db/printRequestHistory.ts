@@ -22,6 +22,10 @@ export function PrintRequestHistoryInit(sequelize:Sequelize) {
 			description: {
 				type: DataTypes.STRING(255),
 				allowNull:true
+			},
+			user_id: {
+				type: DataTypes.INTEGER.UNSIGNED,
+				allowNull:true
 			}
 		},
 		{

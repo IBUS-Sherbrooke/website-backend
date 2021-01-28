@@ -6,6 +6,7 @@ export var printRequestCreate = Joi.object({
 	filepath: Joi.string().required(),
 	description: Joi.string(),
 	created_at: Joi.string(),
-    updated_at: Joi.string(),
+	updated_at: Joi.string(),
+	user_id: Joi.string().required()
 })
 

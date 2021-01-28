@@ -6,6 +6,7 @@ export interface PrintRequestsAttributes {
 	name:string;
 	filepath:string;
 	description?:string;
+	user_id:number
 }
 
 export function PrintRequestInit(sequelize:Sequelize) {
@@ -15,6 +16,7 @@ export function PrintRequestInit(sequelize:Sequelize) {
 		public name!:string;
 		public filepath!:string;
 		public description?:string;
+		public user_id!:number;
 		// timestamps
 		public readonly createdAt!: Date;
 		public readonly updatedAt!: Date;
@@ -39,10 +41,14 @@ export function PrintRequestInit(sequelize:Sequelize) {
 			description: {
 				type: DataTypes.STRING(255),
 				allowNull:true
+			},
+			user_id: {
+				type: DataTypes.INTEGER.UNSIGNED,
+				allowNull:false
 			}
 		},
 		{
-			tableName:'printRequests',
+			tableName:'printrequests',
 			createdAt: 'created_at',
 			updatedAt: 'updated_at',
 			sequelize
