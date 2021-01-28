@@ -1,0 +1,98 @@
+{
+	"info": {
+		"_postman_id": "9fd840f7-e200-437c-8ce0-c0eda9a594d6",
+		"name": "IBUS_printRequest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:2000/api/printRequests",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "print_data",
+							"contentType": "multipart/form-data",
+							"type": "file",
+							"src": "/C:/Gegi/S7/Projet/Databases/ibus_test_script.sql"
+						},
+						{
+							"key": "name",
+							"value": "potato",
+							"contentType": "application/json",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "desc test",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:2000/api/printRequests",
+					"host": [
+						"localhost"
+					],
+					"port": "2000",
+					"path": [
+						"api",
+						"printRequests"
+					]
+				},
+				"description": "Create new print request"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:2000/api/printRequests/2",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "ayy lamo",
+							"contentType": "application/json",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:2000/api/printRequests/2",
+					"host": [
+						"localhost"
+					],
+					"port": "2000",
+					"path": [
+						"api",
+						"printRequests",
+						"2"
+					]
+				},
+				"description": "Put"
+			},
+			"response": []
+		}
+	]
+}
