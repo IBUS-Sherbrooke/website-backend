@@ -1,5 +1,5 @@
 import { expression } from "joi"
-
+import fs from 'fs'
 import {printRequestCreate} from '../validators/printRequestCreate'
 import {printRequestUpdate} from '../validators/printRequestUpdate'
 import {printRequestService} from '../services/printRequest.service'
@@ -40,12 +40,14 @@ export const printRequestController  = {
             let inputIsValid = await printRequestCreate.validate(req.body)
  
             if(inputIsValid.error){
+                fs.unlink(req.body.filepath, ()=>{});
                 res.send(inputIsValid.error.details[0].message)
             } else {
                 let createdPrintRequest = await printRequestService.createPrintRequest(body)
                 res.send(createdPrintRequest)
             }
         } catch (e) {
+            fs.unlink(req.body.filepath, ()=>{});
             res.send(`addPrintRequests Failed : ${e}`)
         }
     },
@@ -63,12 +65,18 @@ export const printRequestController  = {
             let inputIsValid = await printRequestUpdate.validate(req.body)
             console.log(id)
             if(inputIsValid.error){
+                if(req.file){
+                    fs.unlink(req.body.filepath, ()=>{});
+                }
                 res.send(inputIsValid.error.details[0].message)
             } else {
                 let updatePrintRequest = await printRequestService.updatePrintRequest(id, body)
                 res.send(updatePrintRequest)
             }
         } catch (e) {
+            if(req.file){
+                fs.unlink(req.body.filepath, ()=>{});
+            }
             res.send(`updatePrintRequest Failed : ${e}`)
         }
     },
