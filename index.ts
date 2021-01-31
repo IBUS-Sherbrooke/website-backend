@@ -2,9 +2,14 @@ import express from 'express'
 import {routes} from './routes/index'
 import {config} from './configs/config'
 
+var cors = require('cors')
 const app = express()
 
-app.use(express.json())
+app.use(cors(
+	{
+	origin: 'http://localhost:4200'
+	}
+));
 app.use('/api',routes)
 
 
