@@ -12,7 +12,7 @@ export const printRequestService = {
 
 	async getPrintRequestsMock() {
 		try{
-			let printRequests = "allo"
+			let printRequests = "Le serveur est en train de rouler"
 			return printRequests
 		} catch(e) {
 			throw e
