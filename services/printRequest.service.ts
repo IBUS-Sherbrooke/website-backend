@@ -29,20 +29,19 @@ export const printRequestService = {
 		}
 	},
 
-	async updatePrintRequest(reqid:number, printRequeststr:string){
+	async updatePrintRequest(req_user_id:number,req_project_name:string,req_name:string, printRequeststr:string){
 		try{
-			console.log(printRequeststr)
 			let printRequest:PrintRequestsAttributes = JSON.parse(printRequeststr);
-			let updatedPrintRequest = await db.PrintRequests.update(printRequest, {where: {id: reqid}})
+			let updatedPrintRequest = await db.PrintRequests.update(printRequest, {where: {user_id: req_user_id, project_name: req_project_name, name: req_name}})
 			return updatedPrintRequest
 		} catch(e){
 			throw e
 		}
 	},
 
-	async deletePrintRequest(reqid:number){
+	async deletePrintRequest(req_user_id:number,req_project_name:string,req_name:string){
 		try{
-			let deletePrintRequest = await db.PrintRequests.destroy({where: {id: reqid}})
+			let deletePrintRequest = await db.PrintRequests.destroy({where: {user_id: req_user_id, project_name: req_project_name, name: req_name}})
 			if(deletePrintRequest){
 				return true
 			}

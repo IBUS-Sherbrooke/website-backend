@@ -21,13 +21,23 @@
 						},
 						{
 							"key": "name",
-							"value": "potato",
+							"value": "unique_test",
 							"contentType": "application/json",
 							"type": "text"
 						},
 						{
 							"key": "description",
 							"value": "desc test",
+							"type": "text"
+						},
+						{
+							"key": "user_id",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "project_name",
+							"value": "project1",
 							"type": "text"
 						}
 					],
@@ -55,9 +65,7 @@
 		{
 			"name": "localhost:2000/api/printRequests/2",
 			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {
-					"content-type": true
-				}
+				"disabledSystemHeaders": {}
 			},
 			"request": {
 				"method": "PUT",
@@ -67,9 +75,15 @@
 					"formdata": [
 						{
 							"key": "name",
-							"value": "ayy lamo",
+							"value": "allo_allo",
 							"contentType": "application/json",
 							"type": "text"
+						},
+						{
+							"key": "print_data",
+							"contentType": "multipart/form-data",
+							"type": "file",
+							"src": "/C:/Gegi/S7/Projet/Databases/ibus_test_script.sql"
 						}
 					],
 					"options": {
@@ -79,7 +93,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:2000/api/printRequests/2",
+					"raw": "localhost:2000/api/printRequests/?user_id=2&project_name=project1&name=allo",
 					"host": [
 						"localhost"
 					],
@@ -87,10 +101,43 @@
 					"path": [
 						"api",
 						"printRequests",
-						"2"
+						""
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "2"
+						},
+						{
+							"key": "project_name",
+							"value": "project1"
+						},
+						{
+							"key": "name",
+							"value": "allo"
+						}
 					]
 				},
 				"description": "Put"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:2000/api/printRequests",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:2000/api/printRequests",
+					"host": [
+						"localhost"
+					],
+					"port": "2000",
+					"path": [
+						"api",
+						"printRequests"
+					]
+				}
 			},
 			"response": []
 		}

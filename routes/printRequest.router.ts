@@ -1,20 +1,25 @@
 import express from 'express';
 import {printRequestController} from '../controllers/printRequest.controller';
 import multer from 'multer'
+import fs from 'fs'
 const printRequestRouter = express.Router()
 
 var storage = multer.diskStorage({
-	destination: 'uploads/',
+	destination: function(req, file, cb) {
+		const tmp_path:string = './uploads/tmp'
+      	fs.mkdirSync(tmp_path, { recursive: true })
+		cb(null, tmp_path)
+	},
 	filename: function(req, file, cb) {
-		cb(null, file.fieldname + '-' + Date.now())
+		cb(null, file.originalname + '-' + Date.now())
 	}
 })
 var upload = multer({storage:storage})
 
 printRequestRouter.get('/',printRequestController.getPrintRequests)
 printRequestRouter.post('/',upload.single('print_data'), printRequestController.addPrintRequest)
-printRequestRouter.put('/:id',upload.single('print_data'), printRequestController.updatePrintRequestById)
-printRequestRouter.delete('/:id',printRequestController.deletePrintRequestById)
+printRequestRouter.put('/',upload.single('print_data'), printRequestController.updatePrintRequestByName)
+printRequestRouter.delete('/',printRequestController.deletePrintRequestByName)
 
 
 

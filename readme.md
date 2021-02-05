@@ -79,7 +79,7 @@ http://[server adress]:[port]/api/printRequestsHistory/mock
 `Update`:
 ```
 PUT
-http://[server adress]:[port]/api/printRequests/[id]
+http://[server adress]:[port]/api/printRequests/?user_id=[id]&project_name=[projectname]&name=[requestName]
 body: {"name": "potato", "print_data": *file* ...}
 ```
 

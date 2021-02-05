@@ -6,10 +6,10 @@ export function PrintRequestHistoryInit(sequelize:Sequelize) {
 	class PrintRequestsHistory extends Model {}
 	PrintRequestsHistory.init(
 		{
-			id: {
-				type: DataTypes.INTEGER.UNSIGNED,
+			logged_at: {
+				type: DataTypes.TIME,
 				primaryKey: true,
-				autoIncrement: true
+				autoIncrement: false
 			},
 			name: {
 				type: DataTypes.STRING(255),
