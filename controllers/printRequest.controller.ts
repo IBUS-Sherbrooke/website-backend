@@ -1,8 +1,7 @@
 import { expression } from "joi"
 import fs from 'fs'
 import path from 'path'
-import {printRequestCreate} from '../validators/printRequestCreate'
-import {printRequestUpdateBody, printRequestUpdateQuery} from '../validators/printRequestUpdate'
+import {printRequestCreate, printRequestUpdateBody, printRequestUpdateQuery} from '../validators/printRequestValidator'
 import {printRequestService} from '../services/printRequest.service'
 
 
