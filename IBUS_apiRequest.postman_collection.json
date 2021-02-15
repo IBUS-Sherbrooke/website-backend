@@ -1,0 +1,241 @@
+{
+	"info": {
+		"_postman_id": "9fd840f7-e200-437c-8ce0-c0eda9a594d6",
+		"name": "IBUS_apiRequest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Project",
+			"item": [
+				{
+					"name": "ProjectGet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2000/api/project",
+							"host": [
+								"localhost"
+							],
+							"port": "2000",
+							"path": [
+								"api",
+								"project"
+							]
+						},
+						"description": "Get all projects (test)"
+					},
+					"response": []
+				},
+				{
+					"name": "ProjectAdd",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\": 1,\r\n    \"name\":\"projectAddTest1\",\r\n    \"description\":\"alloallo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2000/api/project",
+							"host": [
+								"localhost"
+							],
+							"port": "2000",
+							"path": [
+								"api",
+								"project"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ProjectUpdate",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"projectAddTest1osdfgdd\",\r\n    \"description\":\"alloalloalasfadflo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2000/api/project?user_id=1&name=projectAddTest1",
+							"host": [
+								"localhost"
+							],
+							"port": "2000",
+							"path": [
+								"api",
+								"project"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "1"
+								},
+								{
+									"key": "name",
+									"value": "projectAddTest1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "printRequest",
+			"item": [
+				{
+					"name": "localhost:2000/api/printRequests",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "print_data",
+									"contentType": "multipart/form-data",
+									"type": "file",
+									"src": "/C:/Gegi/S7/Projet/Databases/ibus_test_script.sql"
+								},
+								{
+									"key": "name",
+									"value": "unique_test",
+									"contentType": "application/json",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "desc test",
+									"type": "text"
+								},
+								{
+									"key": "user_id",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "project_name",
+									"value": "project1",
+									"type": "text"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2000/api/printRequests",
+							"host": [
+								"localhost"
+							],
+							"port": "2000",
+							"path": [
+								"api",
+								"printRequests"
+							]
+						},
+						"description": "Create new print request"
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:2000/api/printRequests/2",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "allo_allo",
+									"contentType": "application/json",
+									"type": "text"
+								},
+								{
+									"key": "print_data",
+									"contentType": "multipart/form-data",
+									"type": "file",
+									"src": "/C:/Gegi/S7/Projet/Databases/ibus_test_script.sql"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:2000/api/printRequests/?user_id=2&project_name=project1&name=allo",
+							"host": [
+								"localhost"
+							],
+							"port": "2000",
+							"path": [
+								"api",
+								"printRequests",
+								""
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "2"
+								},
+								{
+									"key": "project_name",
+									"value": "project1"
+								},
+								{
+									"key": "name",
+									"value": "allo"
+								}
+							]
+						},
+						"description": "Put"
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:2000/api/printRequests",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:2000/api/printRequests",
+							"host": [
+								"localhost"
+							],
+							"port": "2000",
+							"path": [
+								"api",
+								"printRequests"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
