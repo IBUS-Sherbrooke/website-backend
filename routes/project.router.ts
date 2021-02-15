@@ -1,12 +1,13 @@
 import express from 'express';
+import { expression } from 'joi';
 import {projectController} from '../controllers/project.controller';
 
 const projectRouter = express.Router()
 
 
 projectRouter.get('/',projectController.getProjects)
-projectRouter.post('/', projectController.addProject)
-projectRouter.put('/', projectController.updateProjectByName)
+projectRouter.post('/',express.json(), projectController.addProject)
+projectRouter.put('/', express.json(),projectController.updateProjectByName)
 projectRouter.delete('/',projectController.deleteProjectByName)
 
 

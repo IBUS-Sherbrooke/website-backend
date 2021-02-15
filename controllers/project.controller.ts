@@ -40,11 +40,12 @@ export const projectController  = {
                 res.send(inputIsValid.error.details[0].message)
             } else {
                 let createdProject = await projectService.createProject(body)
-                let project_dir:string = path.join(__dirname, '../uploads', req.body.user_id, req.body.name)
+                let project_dir:string = path.join(__dirname, '../uploads', req.body.user_id.toString(), req.body.name)
                 fs.mkdirSync(project_dir, { recursive: true })
                 res.send(createdProject)
             }
         } catch (e) {
+            console.log(e)
             res.send(`addProjects Failed : ${e}`)
         }
     },
@@ -70,7 +71,7 @@ export const projectController  = {
 
                 /*rename dir if name changes */
                 if(req.body.name){
-                    let project_dir_parent:string = path.join(__dirname, '../uploads', req.body.user_id)
+                    let project_dir_parent:string = path.join(__dirname, '../uploads', user_id.toString())
                     let project_dir_old:string = path.join(project_dir_parent, name)
                     let project_dir_new:string = path.join(project_dir_parent, req.body.name)
                     fs.renameSync(project_dir_old, project_dir_new)
