@@ -37,6 +37,8 @@ export const printRequestController  = {
                 res.send(`addPrintRequests Failed : missing print data file`)
                 return
             }
+            //rename for unique file
+            req.body.name = req.body.name + '-' + Date.now();
             const body:string = JSON.stringify(req.body)
             /* validate input */
             let inputIsValid = await printRequestCreate.validate(req.body)
@@ -48,7 +50,7 @@ export const printRequestController  = {
                 let createdPrintRequest = await printRequestService.createPrintRequest(body)
                 let file_dir:string = path.join(__dirname, '../uploads', req.body.user_id, req.body.project_name)
                 fs.mkdirSync(file_dir, { recursive: true })
-                fs.renameSync(path.join(__dirname,'..',tmp_filepath), path.join(file_dir, req.body.name + '-' + Date.now()))
+                fs.renameSync(path.join(__dirname,'..',tmp_filepath), path.join(file_dir, req.body.name))
                 res.send(createdPrintRequest)
 
             }
