@@ -15,6 +15,10 @@ interface config_int{
 	node_env:string;
 	web:{port:string;};
 	db:db_int;
+	octoprint:{
+		host:string;
+		port:string;
+	}
 }
 
 var config:config_int = {} as any;
@@ -33,5 +37,10 @@ config.db.password = process.env.DB_PASSWORD!;
 config.db.database = process.env.DB_DATABASE!;
 config.db.port = process.env.DB_PORT!;
 config.db.dialect = <Dialect>process.env.DB_DIALECT!;
+
+//octoprint config
+config.octoprint = {} as any;
+config.octoprint.host = process.env.OCTOPRINT_HOST!;
+config.octoprint.port = process.env.OCTOPRINT_PORT!;
 
 export {config}

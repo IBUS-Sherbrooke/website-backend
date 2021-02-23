@@ -3,6 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import {printRequestCreate, printRequestUpdateBody, printRequestUpdateQuery} from '../validators/printRequestValidator'
 import {printRequestService} from '../services/printRequest.service'
+import {octoPrintService} from '../services/octoPrintComm.service'
 
 
 export const printRequestController  = {
@@ -38,8 +39,8 @@ export const printRequestController  = {
                 return
             }
             //rename for unique file
-            req.body.name = req.body.name + '-' + Date.now();
-            const body:string = JSON.stringify(req.body)
+            req.body.name = req.body.name + '-' + Date.now() + ".gcode"
+
             /* validate input */
             let inputIsValid = await printRequestCreate.validate(req.body)
  
@@ -47,10 +48,16 @@ export const printRequestController  = {
                 fs.unlink(tmp_filepath, ()=>{});
                 res.send(inputIsValid.error.details[0].message)
             } else {
-                let createdPrintRequest = await printRequestService.createPrintRequest(body)
-                let file_dir:string = path.join(__dirname, '../uploads', req.body.user_id, req.body.project_name)
-                fs.mkdirSync(file_dir, { recursive: true })
-                fs.renameSync(path.join(__dirname,'..',tmp_filepath), path.join(file_dir, req.body.name))
+                req.body.status = "pending";
+
+                const body:string = JSON.stringify(req.body);
+                let createdPrintRequest = await printRequestService.createPrintRequest(body);
+                let file_dir:string = path.join(__dirname, '../uploads', req.body.user_id, req.body.project_name);
+                fs.mkdirSync(file_dir, { recursive: true });
+                fs.renameSync(path.join(__dirname,'..',tmp_filepath), path.join(file_dir, req.body.name));
+
+                octoPrintService.UploadFile(path.join(file_dir, req.body.name), req.body.name);
+
                 res.send(createdPrintRequest)
 
             }
