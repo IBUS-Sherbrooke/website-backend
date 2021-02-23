@@ -32,14 +32,15 @@ export const printRequestController  = {
  
     /* add printRequest */
     async addPrintRequest(req:any, res:any) {
+        if(!req.file){
+            res.send(`addPrintRequests Failed : missing print data file`)
+            return
+        }
         const tmp_filepath:string = req.file.destination + '/' + req.file.filename
         try {
-            if(!req.file){
-                res.send(`addPrintRequests Failed : missing print data file`)
-                return
-            }
+
             //rename for unique file
-            req.body.name = req.body.name + '-' + Date.now() + ".gcode"
+            req.body.name = req.body.name + '-' + Date.now()
 
             /* validate input */
             let inputIsValid = await printRequestCreate.validate(req.body)
@@ -56,7 +57,7 @@ export const printRequestController  = {
                 fs.mkdirSync(file_dir, { recursive: true });
                 fs.renameSync(path.join(__dirname,'..',tmp_filepath), path.join(file_dir, req.body.name));
 
-                octoPrintService.UploadFile(path.join(file_dir, req.body.name), req.body.name);
+                octoPrintService.UploadFile(path.join(file_dir, req.body.name));
 
                 res.send(createdPrintRequest)
 

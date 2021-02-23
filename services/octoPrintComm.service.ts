@@ -28,12 +28,12 @@ const axinstance = axios.create({
 }*/
 
 export const octoPrintService = {
-	async UploadFile(fullpath:string, filename:string) {
+	async UploadFile(fullpath:string) {
 		const uploadFileRoute:string = "/files/local";
 
 		console.log(fullpath)
 		const formData:FormData = new FormData();
-		formData.append('file',fs.readFileSync(fullpath),fullpath);
+		formData.append('file',fs.readFileSync(fullpath),fullpath + ".gcode");
 		//formData.append('select', 'false');
 		//formData.append('print','false');
 
