@@ -36,38 +36,39 @@ export const printRequestController  = {
             res.send(`addPrintRequests Failed : missing print data file`)
             return
         }
-        const tmp_filepath:string = req.file.destination + '/' + req.file.filename
-        console.log(tmp_filepath)
+        const tmp_filepath:string = req.file.destination + '/' + req.file.filename;
         if(!tmp_filepath.endsWith('.stl')){
-            res.send(`addPrintRequests Failed : file needs to be a .stl format`)
+            res.send(`addPrintRequests Failed : file needs to be a .stl format`);
             fs.unlink(tmp_filepath, ()=>{});
             return
         }
         try {
 
             //rename for unique file
-            req.body.name = path.basename(req.body.name,'.stl') + '-' + Date.now()
+            req.body.name = path.basename(req.body.name,'.stl') + '-' + Date.now();
 
             /* validate input */
-            let inputIsValid = await printRequestCreate.validate(req.body)
+            let inputIsValid = await printRequestCreate.validate(req.body);
  
             if(inputIsValid.error){
                 fs.unlink(tmp_filepath, ()=>{});
-                res.send(inputIsValid.error.details[0].message)
+                res.send(inputIsValid.error.details[0].message);
             } else {
                 req.body.status = "pending";
 
                 const body:string = JSON.stringify(req.body);
                 let createdPrintRequest = await printRequestService.createPrintRequest(body);
+
+                let stlFileName = req.body.name + '.stl';
                 let file_dir:string = path.join(__dirname, '../uploads', req.body.user_id, req.body.project_name);
                 fs.mkdirSync(file_dir, { recursive: true });
-                let stlFileName = req.body.name + '.stl'
+                
                 fs.renameSync(path.join(__dirname,'..',tmp_filepath), path.join(file_dir, stlFileName));
 
                 let octoUpload_res = await octoPrintService.UploadFile(path.join(file_dir, stlFileName));
                 let octo_slice_res = await octoPrintService.SliceStl(stlFileName);
 
-                res.send(createdPrintRequest)
+                res.send(createdPrintRequest);
 
             }
         } catch (e) {

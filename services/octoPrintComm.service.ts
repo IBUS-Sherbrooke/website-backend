@@ -65,18 +65,13 @@ export const octoPrintService = {
 
 	async SliceStl(filename:string){
 		const stlFileRoute:string = "/files/local/stl/" + filename;
-		let formData:FormData = new FormData();
-		formData.append('command','slice');
-		formData.append('slicer', 'curalegacy');
-		formData.append('gcode', filename.replace('.stl','.gcode'));
 
 		let payload = {
 			command : 'slice',
 			slicer : 'curalegacy',
-			gcode : filename.replace('.stl','.gcode',)
+			gcode : `../gcode/${filename.replace('.stl','.gcode')}`
 		};
-		
-		const strFormData = JSON.stringify(formData);
+
 		try {
 			let res = await axinstance.post(stlFileRoute,payload, {
 				headers: {
