@@ -31,14 +31,11 @@ export const octoPrintService = {
 	async UploadFile(fullpath:string) {
 		const uploadFileRoute:string = "/files/local";
 
-		console.log(fullpath)
-		const formData:FormData = new FormData();
-		formData.append('file',fs.readFileSync(fullpath),fullpath + ".gcode");
+		let formData:FormData = new FormData();
+		formData.append('file',fs.readFileSync(fullpath),fullpath);
+		formData.append('path','/stl')
 		//formData.append('select', 'false');
-		//formData.append('print','false');
-
-		const strFormData:string = JSON.stringify(formData);
-		
+		//formData.append('print','false');	
 		
 		try {
 			let res = await axinstance.post(uploadFileRoute,formData.getBuffer(), {
@@ -58,10 +55,38 @@ export const octoPrintService = {
 	async GetFiles(){
 		const getFilesRoute:string = "/files";
 		try {
-			let res = await axinstance.get(getFilesRoute)
+			let res = await axinstance.get(getFilesRoute);
+			return res;
+		}catch (e) {
+			throw(e);
+		}
+		
+	},
+
+	async SliceStl(filename:string){
+		const stlFileRoute:string = "/files/local/stl/" + filename;
+		let formData:FormData = new FormData();
+		formData.append('command','slice');
+		formData.append('slicer', 'curalegacy');
+		formData.append('gcode', filename.replace('.stl','.gcode'));
+
+		let payload = {
+			command : 'slice',
+			slicer : 'curalegacy',
+			gcode : filename.replace('.stl','.gcode',)
+		};
+		
+		const strFormData = JSON.stringify(formData);
+		try {
+			let res = await axinstance.post(stlFileRoute,payload, {
+				headers: {
+					'Content-type' : 'application/json'
+				}
+			});
 			console.log(res.data);
 			return res;
 		}catch (e) {
+			console.log(e)
 			throw(e);
 		}
 		
