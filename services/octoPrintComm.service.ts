@@ -9,7 +9,9 @@ const axinstance = axios.create({
 	baseURL: rootApi,
 	headers: {
 		"X-Api-Key": octoPrintToken
-	}
+	},
+	maxContentLength: Infinity,
+    maxBodyLength: Infinity,
 })
 
 /*interface GetFilesResponse {

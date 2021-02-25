@@ -37,11 +37,6 @@ export const printRequestController  = {
             return
         }
         const tmp_filepath:string = req.file.destination + '/' + req.file.filename;
-        if(!tmp_filepath.endsWith('.stl')){
-            res.send(`addPrintRequests Failed : file needs to be a .stl format`);
-            fs.unlink(tmp_filepath, ()=>{});
-            return
-        }
         try {
 
             //rename for unique file
