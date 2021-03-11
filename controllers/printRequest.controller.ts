@@ -9,7 +9,7 @@ import {responseMessage} from './responses'
 
 export const printRequestController  = {
  
-    /* get All printRequests */
+    /* get printRequests */
     async getPrintRequests(req:any, res:any) {
         try {
             let queryIsValid = await printRequestGetQuery.validate(req.query)

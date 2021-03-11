@@ -52,67 +52,15 @@ tsc
 
 ## Usage example
 
+[API documentation](https://documenter.getpostman.com/view/14919630/Tz5p6dCq)
+
 Default environnement variable are in .env
 
 You can test with [**Postman**](https://www.postman.com/downloads/)
 
 Postman request example in [IBUS_printRequest.postman_collection.json](IBUS_printRequest.postman_collection.json)
 
-`GetAll`:
-```
-GET
-http://[server adress]:[port]/api/printRequests
 
-GET
-http://[server adress]:[port]/api/printRequestsHistory
-```
-
-`Current mocks`:
-```
-GET
-http://[server adress]:[port]/api/printRequests/mock
-
-GET
-http://[server adress]:[port]/api/printRequestsHistory/mock
-```
-
-`Update`:
-```
-PUT
-http://[server adress]:[port]/api/printRequests/?user_id=[id]&project_name=[projectname]&name=[requestName]
-body: {"name": "potato", "print_data": *file* ...}
-```
-
-`AddNew`:
-```
-POST /api/printRequests HTTP/1.1
-Host: localhost:2000
-Content-Length: 458
-Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
-
-----WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="print_data"; filename="/C:/Gegi/S7/Projet/Databases/ibus_test_script.sql"
-Content-Type: <Content-Type header here>
-
-(data)
-----WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="name"
-Content-Type: application/json
-
-potato
-----WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="description"
-
-desc test
-----WebKitFormBoundary7MA4YWxkTrZu0gW
-
-```
-
-`Delete`:
-```
-DELETE
-http://[server adress]:[port]/api/printRequests/[id]
-```
 ## DataBase
 Take a look at [the database setup](https://github.com/IBUS-Sherbrooke/website-database) repo. 
 

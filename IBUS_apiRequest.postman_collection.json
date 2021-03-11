@@ -1,7 +1,8 @@
 {
 	"info": {
 		"_postman_id": "9fd840f7-e200-437c-8ce0-c0eda9a594d6",
-		"name": "IBUS_apiRequest",
+		"name": "IBUS_API",
+		"description": "API pour communiquer avec le backend IBUS",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -9,22 +10,32 @@
 			"name": "Project",
 			"item": [
 				{
-					"name": "ProjectGet",
+					"name": "Get Project Items",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:2000/api/project",
+							"raw": "{{RootURL}}/project?user_id=1&name=project1",
 							"host": [
-								"localhost"
+								"{{RootURL}}"
 							],
-							"port": "2000",
 							"path": [
-								"api",
 								"project"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "1",
+									"description": "(Required)"
+								},
+								{
+									"key": "name",
+									"value": "project1",
+									"description": "project name (optional)"
+								}
 							]
 						},
-						"description": "Get all projects (test)"
+						"description": "# Usage\nSpecify a user_id and optionally a project name to retrieve"
 					},
 					"response": []
 				},
@@ -43,13 +54,11 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:2000/api/project",
+							"raw": "{{RootURL}}/project",
 							"host": [
-								"localhost"
+								"{{RootURL}}"
 							],
-							"port": "2000",
 							"path": [
-								"api",
 								"project"
 							]
 						}
@@ -71,36 +80,37 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:2000/api/project?user_id=1&name=projectAddTest1",
+							"raw": "{{RootURL}}/project?user_id=1&name=projectAddTest1",
 							"host": [
-								"localhost"
+								"{{RootURL}}"
 							],
-							"port": "2000",
 							"path": [
-								"api",
 								"project"
 							],
 							"query": [
 								{
 									"key": "user_id",
-									"value": "1"
+									"value": "1",
+									"description": "(Required)"
 								},
 								{
 									"key": "name",
-									"value": "projectAddTest1"
+									"value": "projectAddTest1",
+									"description": "(Required)"
 								}
 							]
 						}
 					},
 					"response": []
 				}
-			]
+			],
+			"description": "Projects owned and created by each user"
 		},
 		{
 			"name": "printRequest",
 			"item": [
 				{
-					"name": "localhost:2000/api/printRequests",
+					"name": "Create new print request",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -110,45 +120,43 @@
 								{
 									"key": "print_data",
 									"contentType": "multipart/form-data",
+									"description": "file to upload or blob (Required)",
 									"type": "file",
-									"src": "/C:/Gegi/S7/Projet/Databases/ibus_test_script.sql"
+									"src": []
 								},
 								{
 									"key": "name",
-									"value": "unique_test",
+									"value": "allo",
 									"contentType": "application/json",
+									"description": "name of the request (Required)",
 									"type": "text"
 								},
 								{
 									"key": "description",
 									"value": "desc test",
+									"description": "description of the request (optional)",
 									"type": "text"
 								},
 								{
 									"key": "user_id",
 									"value": "2",
+									"description": "(Required)",
 									"type": "text"
 								},
 								{
 									"key": "project_name",
 									"value": "project1",
+									"description": "parent project to the request (Required)",
 									"type": "text"
 								}
-							],
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							]
 						},
 						"url": {
-							"raw": "localhost:2000/api/printRequests",
+							"raw": "{{RootURL}}/printRequests",
 							"host": [
-								"localhost"
+								"{{RootURL}}"
 							],
-							"port": "2000",
 							"path": [
-								"api",
 								"printRequests"
 							]
 						},
@@ -157,7 +165,7 @@
 					"response": []
 				},
 				{
-					"name": "localhost:2000/api/printRequests/2",
+					"name": "Update existing print request",
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {}
 					},
@@ -171,44 +179,42 @@
 									"key": "name",
 									"value": "allo_allo",
 									"contentType": "application/json",
+									"description": "new name (optional)",
 									"type": "text"
 								},
 								{
 									"key": "print_data",
 									"contentType": "multipart/form-data",
+									"description": "new data (optional)",
 									"type": "file",
 									"src": "/C:/Gegi/S7/Projet/Databases/ibus_test_script.sql"
 								}
-							],
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							]
 						},
 						"url": {
-							"raw": "localhost:2000/api/printRequests/?user_id=2&project_name=project1&name=allo",
+							"raw": "{{RootURL}}/printRequests/?user_id=2&project_name=project1&name=allo",
 							"host": [
-								"localhost"
+								"{{RootURL}}"
 							],
-							"port": "2000",
 							"path": [
-								"api",
 								"printRequests",
 								""
 							],
 							"query": [
 								{
 									"key": "user_id",
-									"value": "2"
+									"value": "2",
+									"description": "(Required)"
 								},
 								{
 									"key": "project_name",
-									"value": "project1"
+									"value": "project1",
+									"description": "parent project of the request to update (Required)"
 								},
 								{
 									"key": "name",
-									"value": "allo"
+									"value": "allo",
+									"description": "name of the request to update (Required)"
 								}
 							]
 						},
@@ -217,25 +223,66 @@
 					"response": []
 				},
 				{
-					"name": "localhost:2000/api/printRequests",
+					"name": "Get print request item",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:2000/api/printRequests",
+							"raw": "{{RootURL}}/printRequests?user_id=1&project_name=project1&name=allo",
 							"host": [
-								"localhost"
+								"{{RootURL}}"
 							],
-							"port": "2000",
 							"path": [
-								"api",
 								"printRequests"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "1",
+									"description": "(Required)"
+								},
+								{
+									"key": "project_name",
+									"value": "project1",
+									"description": "(Optional)"
+								},
+								{
+									"key": "name",
+									"value": "allo",
+									"description": "(Optional)"
+								}
 							]
 						}
 					},
 					"response": []
 				}
 			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "RootURL",
+			"value": "localhost:2000/api"
 		}
 	]
 }
