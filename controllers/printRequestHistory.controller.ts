@@ -1,6 +1,6 @@
 import { expression } from "joi"
 import {printRequestHistoryService} from '../services/printRequestHistory.service'
-
+import {responseMessage} from './responses'
 
 export const printRequestHistoryController  = {
  
@@ -8,9 +8,12 @@ export const printRequestHistoryController  = {
     async getPrintRequestsHistory(req:any, res:any) {
         try {
             let printRequestsHistory = await printRequestHistoryService.getPrintRequestsHistory()
-            res.send(printRequestsHistory)
+
+            let msg:responseMessage = {data: printRequestsHistory, message: "getPrintRequestHistory success!"}
+            res.status(200).json(msg)
         } catch (e) {
-            res.send(`getPrintRequestsHistory Failed : ${e}`)
+            let msg:responseMessage = {data: e, message: "getPrintRequestsHistory failed"}
+            res.status(400).json(msg)
         }
     },
 
@@ -18,9 +21,12 @@ export const printRequestHistoryController  = {
     async getPrintRequestsMock(req:any, res:any) {
         try {
             let printRequestsHistory = await printRequestHistoryService.getPrintRequestsHistoryMock()
-            res.send(printRequestsHistory)
+            
+            let msg:responseMessage = {data: printRequestsHistory, message: "getPrintRequestHistory success!"}
+            res.status(200).json(msg)
         } catch (e) {
-            res.send(`getPrintRequestsHistory Failed : ${e}`)
+            let msg:responseMessage = {data: e, message: "getPrintRequestsHistory failed"}
+            res.status(400).json(msg)
         }
     }
 }

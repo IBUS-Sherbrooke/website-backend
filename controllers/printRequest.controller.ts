@@ -1,9 +1,10 @@
 import { expression } from "joi"
-import fs from 'fs'
+import fs, { createReadStream } from 'fs'
 import path from 'path'
 import {printRequestCreate, printRequestUpdateBody, printRequestUpdateQuery} from '../validators/printRequestValidator'
 import {printRequestService} from '../services/printRequest.service'
 import {octoPrintService} from '../services/octoPrintComm.service'
+import {responseMessage} from './responses'
 
 
 export const printRequestController  = {
@@ -12,10 +13,13 @@ export const printRequestController  = {
     async getPrintRequests(req:any, res:any) {
         try {
             let printRequests = await printRequestService.getPrintRequests()
-            res.send(printRequests)
+
+            let msg:responseMessage = {data: printRequests, message: "getPrintRequests Success!"}
+            res.status(200).json(msg)
         } catch (e) {
             console.log(e)
-            res.send(`getPrintRequests Failed : ${e}`)
+            let msg:responseMessage = {data: e, message: "getPrintRequests Failed"}
+            res.status(400).json(msg)
         }
     },
 
@@ -23,22 +27,27 @@ export const printRequestController  = {
     async getPrintRequestsMock(req:any, res:any) {
         try {
             let printRequests = await printRequestService.getPrintRequestsMock()
-            res.send(printRequests)
+
+            let msg:responseMessage = {data: printRequests, message: "getPrintRequests Success!"}
+            res.status(200).json(msg)
         } catch (e) {
             console.log(e)
-            res.send(`getPrintRequests Failed : ${e}`)
+            let msg:responseMessage = {data: e, message: "getPrintRequests Failed"}
+            res.status(400).json(msg)
         }
     },
  
     /* add printRequest */
     async addPrintRequest(req:any, res:any) {
         if(!req.file){
-            res.send(`addPrintRequests Failed : missing print data file`)
+            let msg:responseMessage = {message: "addPrintRequests Failed : needs a file"}
+            res.status(400).json(msg);
             return
         }
         const tmp_filepath:string = req.file.destination + '/' + req.file.filename;
         if(!tmp_filepath.endsWith('.stl')){
-            res.send(`addPrintRequests Failed : file needs to be a .stl format`);
+            let msg:responseMessage = {message: "addPrintRequests Failed : file needs to be a .stl format"}
+            res.status(400).json(msg);
             fs.unlink(tmp_filepath, ()=>{});
             return
         }
@@ -52,7 +61,8 @@ export const printRequestController  = {
  
             if(inputIsValid.error){
                 fs.unlink(tmp_filepath, ()=>{});
-                res.send(inputIsValid.error.details[0].message);
+                let msg:responseMessage = {data: inputIsValid.error.details[0].message, message: "addPrintRequests Failed : body is invalid"}
+                res.status(400).json(msg);
             } else {
                 req.body.status = "pending";
 
@@ -68,12 +78,14 @@ export const printRequestController  = {
                 let octoUpload_res = await octoPrintService.UploadFile(path.join(file_dir, stlFileName));
                 let octo_slice_res = await octoPrintService.SliceStl(stlFileName);
 
-                res.send(createdPrintRequest);
+                let msg:responseMessage = {data: createdPrintRequest, message: "CreatePrintRequest Success!"}
+                res.status(200).json(msg);
 
             }
         } catch (e) {
             fs.unlink(tmp_filepath, ()=>{});
-            res.send(`addPrintRequests Failed : ${e}`)
+            let msg:responseMessage = {data: e, message: "addPrintRequests Failed"}
+            res.status(400).json(msg)
         }
     },
  
@@ -96,21 +108,26 @@ export const printRequestController  = {
                     fs.unlink(req.body.filepath, ()=>{});
                 }
                 if(bodyIsValid.error){
-                    res.send("body: " + bodyIsValid.error.details[0].message)
+                    let msg:responseMessage = {data: bodyIsValid.error.details[0].message, message: "body is invalid"}
+                    res.status(400).json(msg)
                 } else if(queryIsValid.error){
-                    res.send("param: " + queryIsValid.error.details[0].message)
+                    let msg:responseMessage = {data: queryIsValid.error.details[0].message, message: "query is invalid"}
+                    res.status(400).json(msg)
                 }
             } else {
                 /*Calling the service*/
                 let updatePrintRequest = await printRequestService.updatePrintRequest(user_id, project_name, name, body)
-                res.send(updatePrintRequest)
+
+                let msg:responseMessage = {data: updatePrintRequest, message: "updatePrintRequest Success!"}
+                res.status(200).json(msg)
             }
         } catch (e) {
             console.log(e)
             if(req.file){
                 fs.unlink(req.body.filepath, ()=>{});
             }
-            res.send(`updatePrintRequest Failed : ${e}`)
+            let msg:responseMessage = {data: e, message: "updatePrintRequest Failed"}
+            res.status(400).json(msg)
         }
     },
  
@@ -120,10 +137,13 @@ export const printRequestController  = {
             const project_name:string = req.query.project_name
             const name:string = req.query.name
             let deletePrintRequest = await printRequestService.deletePrintRequest(user_id, project_name, name)
-            res.send(deletePrintRequest)
+
+            let msg:responseMessage = {data: deletePrintRequest, message: "deletePrintRequest Success!"}
+            res.status(200).json(msg)
         } catch (e) {
             console.log(e)
-            res.send(`deletePrintRequest Failed : ${e}`)
+            let msg:responseMessage = {data: e, message: "deletePrintRequest Failed"}
+            res.status(400).json(msg)
         }
     }
 }

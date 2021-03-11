@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import {projectCreate, projectUpdateBody, projectUpdateQuery} from '../validators/projectValidator'
 import {projectService} from '../services/project.service'
-
+import {responseMessage} from './responses'
 
 export const projectController  = {
  
@@ -11,10 +11,13 @@ export const projectController  = {
     async getProjects(req:any, res:any) {
         try {
             let projects = await projectService.getProjects()
-            res.send(projects)
+            let msg:responseMessage = {data: projects, message: "getProjects success!"}
+            res.status(200).json(msg)
         } catch (e) {
             console.log(e)
-            res.send(`getProjects Failed : ${e}`)
+
+            let msg:responseMessage = {data: e, message: "getProjects Failed"}
+            res.status(400).json(msg)
         }
     },
 
@@ -23,9 +26,14 @@ export const projectController  = {
         try {
             let projects = await projectService.getProjectsMock()
             res.send(projects)
+
+            let msg:responseMessage = {data: projects, message: "getProjects success!"}
+            res.status(200).json(msg)
         } catch (e) {
             console.log(e)
-            res.send(`getProjects Failed : ${e}`)
+
+            let msg:responseMessage = {data: e, message: "getProjects Failed"}
+            res.status(400).json(msg)
         }
     },
  
@@ -37,16 +45,21 @@ export const projectController  = {
             let inputIsValid = await projectCreate.validate(req.body)
  
             if(inputIsValid.error){
-                res.send(inputIsValid.error.details[0].message)
+                let msg:responseMessage = {data: inputIsValid.error.details[0].message, message: "addProject Failed"}
+                res.status(400).json(msg)
             } else {
                 let createdProject = await projectService.createProject(body)
                 let project_dir:string = path.join(__dirname, '../uploads', req.body.user_id.toString(), req.body.name)
                 fs.mkdirSync(project_dir, { recursive: true })
-                res.send(createdProject)
+
+                let msg:responseMessage = {data: createdProject, message: "addProject Success!"}
+                res.status(200).json(msg)
             }
         } catch (e) {
             console.log(e)
-            res.send(`addProjects Failed : ${e}`)
+
+            let msg:responseMessage = {data: e, message: "addProject Failed"}
+            res.status(400).json(msg)
         }
     },
  
@@ -61,9 +74,11 @@ export const projectController  = {
 
             if(bodyIsValid.error || queryIsValid.error){
                 if(bodyIsValid.error){
-                    res.send("body: " + bodyIsValid.error.details[0].message)
+                    let msg:responseMessage = {data: bodyIsValid.error.details[0].message, message: "updateProject Failed: body invalid"}
+                    res.status(400).json(msg)
                 } else if(queryIsValid.error){
-                    res.send("param: " + queryIsValid.error.details[0].message)
+                    let msg:responseMessage = {data: queryIsValid.error.details[0].message, message: "updateProject Failed: query invalid"}
+                    res.status(400).json(msg)
                 }
             } else {
                 /*Calling the service*/
@@ -76,11 +91,13 @@ export const projectController  = {
                     let project_dir_new:string = path.join(project_dir_parent, req.body.name)
                     fs.renameSync(project_dir_old, project_dir_new)
                 }
-                res.send(updateProject)
+                let msg:responseMessage = {data: updateProject, message: "updateProject Success!"}
+                res.status(200).json(msg)
             }
         } catch (e) {
             console.log(e)
-            res.send(`updateProject Failed : ${e}`)
+            let msg:responseMessage = {data: e, message: "updateProject failed"}
+            res.status(400).json(msg)
         }
     },
 
@@ -91,7 +108,8 @@ export const projectController  = {
             let queryIsValid = await projectUpdateQuery.validate(req.query)
 
             if(queryIsValid.error){
-                res.send("query: " + queryIsValid.error.details[0].message)
+                let msg:responseMessage = {data: queryIsValid.error.details[0].message, message: "deleteProject failed: query invalid"}
+                res.status(400).json(msg)
                 return
             }
 
@@ -99,10 +117,13 @@ export const projectController  = {
             let deleteProject = await projectService.deleteProject(user_id, name)
             let project_dir:string = path.join(__dirname, '../uploads', req.body.user_id, req.body.name)
             fs.rmSync(project_dir)
-            
-            res.send(deleteProject)
+
+            let msg:responseMessage = {data: deleteProject, message: "deleteProject failed: query invalid"}
+            res.status(200).json(msg)
         } catch (e) {
             console.log(e)
+            let msg:responseMessage = {data: e, message: "deleteProject failed"}
+            res.status(400).json(msg)
             res.send(`deleteProject Failed : ${e}`)
         }
     }
