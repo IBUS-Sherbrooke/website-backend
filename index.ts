@@ -12,7 +12,6 @@ app.use(cors(
 ));
 app.use('/api',routes)
 
-
 app.listen(config.web.port,()=>{
 	console.log(`server running at port ${config.web.port}`)
 })

@@ -1,7 +1,7 @@
 import { expression } from "joi"
 import fs from 'fs'
 import path from 'path'
-import {projectCreate, projectUpdateBody, projectUpdateQuery} from '../validators/projectValidator'
+import {projectCreate, projectUpdateBody, projectUpdateQuery, projectGetQuery} from '../validators/projectValidator'
 import {projectService} from '../services/project.service'
 import {responseMessage} from './responses'
 
@@ -10,7 +10,14 @@ export const projectController  = {
     /* get All projects */
     async getProjects(req:any, res:any) {
         try {
-            let projects = await projectService.getProjects()
+            let queryIsValid = await projectGetQuery.validate(req.query)
+
+            if(queryIsValid.error){
+                let msg:responseMessage = {data: queryIsValid.error.details[0].message, message: "getProjects failed: query is invalid"}
+                res.status(400).json(msg)
+            }
+
+            let projects = await projectService.getProjects(req.query)
             let msg:responseMessage = {data: projects, message: "getProjects success!"}
             res.status(200).json(msg)
         } catch (e) {

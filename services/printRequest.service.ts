@@ -1,9 +1,17 @@
 import {db,PrintRequestsAttributes} from '../db/index';
 
 export const printRequestService = {
-	async getPrintRequests() {
+	async getPrintRequests(query:any) {
+		let param:any = {user_id: query.user_id}
+		if(query.project_name){
+			param.project_name = query.project_name
+		}
+		if(query.name){
+			param.name = query.name
+		}
+
 		try{
-			let printRequests = await db.PrintRequests.findAll()
+			let printRequests = await db.PrintRequests.findAll({where: param})
 			return printRequests
 		} catch(e) {
 			throw e

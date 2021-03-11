@@ -1,7 +1,7 @@
 import { expression } from "joi"
 import fs, { createReadStream } from 'fs'
 import path from 'path'
-import {printRequestCreate, printRequestUpdateBody, printRequestUpdateQuery} from '../validators/printRequestValidator'
+import {printRequestCreate, printRequestUpdateBody, printRequestUpdateQuery, printRequestGetQuery} from '../validators/printRequestValidator'
 import {printRequestService} from '../services/printRequest.service'
 import {octoPrintService} from '../services/octoPrintComm.service'
 import {responseMessage} from './responses'
@@ -12,7 +12,14 @@ export const printRequestController  = {
     /* get All printRequests */
     async getPrintRequests(req:any, res:any) {
         try {
-            let printRequests = await printRequestService.getPrintRequests()
+            let queryIsValid = await printRequestGetQuery.validate(req.query)
+
+            if(queryIsValid.error){
+                let msg:responseMessage = {data: queryIsValid.error.details[0].message, message: "getPrintRequest failed: query is invalid"}
+                res.status(400).json(msg)
+            }
+
+            let printRequests = await printRequestService.getPrintRequests(req.query)
 
             let msg:responseMessage = {data: printRequests, message: "getPrintRequests Success!"}
             res.status(200).json(msg)
