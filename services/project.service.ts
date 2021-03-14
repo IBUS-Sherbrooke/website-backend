@@ -1,9 +1,14 @@
 import {db,ProjectsAttributes} from '../db/index';
 
 export const projectService = {
-	async getProjects() {
+	async getProjects(query:any) {
 		try{
-			let projects = await db.Projects.findAll()
+			let param:any = {user_id: query.user_id}
+			if(query.name){
+				param.name = query.name
+			}
+
+			let projects = await db.Projects.findAll({where: param})
 			return projects
 		} catch(e) {
 			throw e

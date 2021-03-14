@@ -1,14 +1,14 @@
 import express from 'express';
 import {printRequestController} from '../controllers/printRequest.controller';
 import multer from 'multer'
-import fs from 'fs'
+import {tmpSession} from '../services/fsStore';
+
 const printRequestRouter = express.Router()
 
 var storage = multer.diskStorage({
 	destination: function(req, file, cb) {
-		const tmp_path:string = './uploads/tmp'
-      	fs.mkdirSync(tmp_path, { recursive: true })
-		cb(null, tmp_path)
+		let tmp_session:tmpSession = new tmpSession();
+		cb(null, tmp_session.path)
 	},
 	filename: function(req, file, cb) {
 		cb(null, '-' + Date.now() + file.originalname)

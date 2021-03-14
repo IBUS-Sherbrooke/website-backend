@@ -5,6 +5,7 @@ import {printRequestCreate, printRequestUpdateBody, printRequestUpdateQuery, pri
 import {printRequestService} from '../services/printRequest.service'
 import {octoPrintService} from '../services/octoPrintComm.service'
 import {responseMessage} from './responses'
+import {tmpSession, fsStore} from '../services/fsStore'
 
 
 export const printRequestController  = {
@@ -51,9 +52,10 @@ export const printRequestController  = {
             res.status(400).json(msg);
             return
         }
-        const tmp_filepath:string = req.file.destination + '/' + req.file.filename;
+        let tmp_session:tmpSession = new tmpSession(req.file.destination)
+        
         try {
-
+            const tmp_filepath:string = path.join(tmp_session.path,req.file.filename);
             //rename for unique file
             req.body.name = path.basename(req.body.name,'.stl') + '-' + Date.now();
 
@@ -61,8 +63,7 @@ export const printRequestController  = {
             let inputIsValid = await printRequestCreate.validate(req.body);
  
             if(inputIsValid.error){
-                fs.unlink(tmp_filepath, ()=>{});
-                let msg:responseMessage = {data: inputIsValid.error.details[0].message, message: "addPrintRequests Failed : body is invalid"}
+                let msg:responseMessage = {data: inputIsValid.error.details[0].message, message: "addPrintRequests Failed : body is invalid"};
                 res.status(400).json(msg);
             } else {
                 req.body.status = "pending";
@@ -79,15 +80,17 @@ export const printRequestController  = {
                 let octoUpload_res = await octoPrintService.UploadFile(path.join(file_dir, stlFileName));
                 let octo_slice_res = await octoPrintService.SliceStl(stlFileName);
 
-                let msg:responseMessage = {data: createdPrintRequest, message: "CreatePrintRequest Success!"}
+                let msg:responseMessage = {data: createdPrintRequest, message: "CreatePrintRequest Success!"};
                 res.status(200).json(msg);
 
             }
         } catch (e) {
-            fs.unlink(tmp_filepath, ()=>{});
-            let msg:responseMessage = {data: e, message: "addPrintRequests Failed"}
-            res.status(400).json(msg)
+            let msg:responseMessage = {data: e, message: "addPrintRequests Failed"};
+            res.status(400).json(msg);
+        } finally {
+            tmp_session.cleanSession();
         }
+        
     },
  
     async updatePrintRequestByName(req:any, res:any) {
