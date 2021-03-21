@@ -72,12 +72,9 @@ export const printRequestController  = {
                 let createdPrintRequest = await printRequestService.createPrintRequest(body);
 
                 let stlFileName = req.body.name + '.stl';
-                let file_dir:string = path.join(__dirname, '../uploads', req.body.user_id, req.body.project_name);
-                fs.mkdirSync(file_dir, { recursive: true });
-                
-                fs.renameSync(path.join(__dirname,'..',tmp_filepath), path.join(file_dir, stlFileName));
+                let printData_path:string = fsStore.savePrintData(tmp_filepath,req.body.user_id, req.body.project_name, stlFileName)
 
-                let octoUpload_res = await octoPrintService.UploadFile(path.join(file_dir, stlFileName));
+                let octoUpload_res = await octoPrintService.UploadFile(printData_path);
                 let octo_slice_res = await octoPrintService.SliceStl(stlFileName);
 
                 let msg:responseMessage = {data: createdPrintRequest, message: "CreatePrintRequest Success!"};
@@ -108,9 +105,6 @@ export const printRequestController  = {
             let queryIsValid = await printRequestUpdateQuery.validate(req.query)
 
             if(bodyIsValid.error || queryIsValid.error){
-                if(req.file){
-                    fs.unlink(req.body.filepath, ()=>{});
-                }
                 if(bodyIsValid.error){
                     let msg:responseMessage = {data: bodyIsValid.error.details[0].message, message: "body is invalid"}
                     res.status(400).json(msg)
@@ -127,12 +121,14 @@ export const printRequestController  = {
             }
         } catch (e) {
             console.log(e)
+            let msg:responseMessage = {data: e, message: "updatePrintRequest Failed"}
+            res.status(400).json(msg)
+        } finally {
             if(req.file){
                 fs.unlink(req.body.filepath, ()=>{});
             }
-            let msg:responseMessage = {data: e, message: "updatePrintRequest Failed"}
-            res.status(400).json(msg)
         }
+
     },
  
     async deletePrintRequestByName(req:any, res:any) {
@@ -140,7 +136,9 @@ export const printRequestController  = {
             const user_id:number = req.query.user_id
             const project_name:string = req.query.project_name
             const name:string = req.query.name
+            
             let deletePrintRequest = await printRequestService.deletePrintRequest(user_id, project_name, name)
+            fsStore.deletePrintData(user_id.toString(), project_name, name)
 
             let msg:responseMessage = {data: deletePrintRequest, message: "deletePrintRequest Success!"}
             res.status(200).json(msg)

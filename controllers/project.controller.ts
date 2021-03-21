@@ -4,6 +4,7 @@ import path from 'path'
 import {projectCreate, projectUpdateBody, projectUpdateQuery, projectGetQuery} from '../validators/projectValidator'
 import {projectService} from '../services/project.service'
 import {responseMessage} from './responses'
+import { fsStore } from "../services/fsStore"
 
 export const projectController  = {
  
@@ -56,11 +57,13 @@ export const projectController  = {
                 res.status(400).json(msg)
             } else {
                 let createdProject = await projectService.createProject(body)
-                let project_dir:string = path.join(__dirname, '../uploads', req.body.user_id.toString(), req.body.name)
-                fs.mkdirSync(project_dir, { recursive: true })
 
-                let msg:responseMessage = {data: createdProject, message: "addProject Success!"}
-                res.status(200).json(msg)
+                fsStore.addProject(req.body.user_id.toString(), req.body.name);
+                let project_dir:string = path.join(__dirname, '../uploads', req.body.user_id.toString(), req.body.name);
+                fs.mkdirSync(project_dir, { recursive: true });
+
+                let msg:responseMessage = {data: createdProject, message: "addProject Success!"};
+                res.status(200).json(msg);
             }
         } catch (e) {
             console.log(e)
@@ -93,10 +96,7 @@ export const projectController  = {
 
                 /*rename dir if name changes */
                 if(req.body.name){
-                    let project_dir_parent:string = path.join(__dirname, '../uploads', user_id.toString())
-                    let project_dir_old:string = path.join(project_dir_parent, name)
-                    let project_dir_new:string = path.join(project_dir_parent, req.body.name)
-                    fs.renameSync(project_dir_old, project_dir_new)
+                    fsStore.renameProject(user_id.toString(), name, req.body.name);
                 }
                 let msg:responseMessage = {data: updateProject, message: "updateProject Success!"}
                 res.status(200).json(msg)
@@ -121,9 +121,8 @@ export const projectController  = {
             }
 
             /*remove dir and db entry */
-            let deleteProject = await projectService.deleteProject(user_id, name)
-            let project_dir:string = path.join(__dirname, '../uploads', req.body.user_id, req.body.name)
-            fs.rmSync(project_dir)
+            let deleteProject = await projectService.deleteProject(user_id, name);
+            fsStore.deleteProject(req.body.user_id, req.body.name);
 
             let msg:responseMessage = {data: deleteProject, message: "deleteProject failed: query invalid"}
             res.status(200).json(msg)
