@@ -2,7 +2,7 @@
 ******************************************************************/
 'use strict';
 import {Sequelize} from 'sequelize'
-import {PrintRequestInit,PrintRequestsAttributes} from './printRequest';
+import {PrintRequestInit,PrintRequestsAttributes, PrintRequests} from './printRequest';
 import {ProjectInit,ProjectsAttributes} from './project';
 import {PrintRequestHistoryInit} from './printRequestHistory';
 import {config} from '../configs/config';
@@ -27,6 +27,8 @@ const db = {
 	Projects:ProjectInit(sequelizer)
 }
 
+
+export {PrintRequests};
 export {db};
 export {PrintRequestsAttributes};
 export {ProjectsAttributes};

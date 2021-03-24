@@ -74,7 +74,7 @@ export const printRequestController  = {
                 let printData_path:string = fsStore.savePrintData(tmp_filepath,req.body.user_id, req.body.project_name, stlFileName)
 
                 let octoUpload_res = await octoPrintService.UploadFile(printData_path);
-                let octo_slice_res = await octoPrintService.SliceStl(stlFileName);
+                let octo_slice_res = await octoPrintService.SliceStlAndPrint(stlFileName);
                 
 
                 let msg:responseMessage = {data: createdPrintRequest, message: "CreatePrintRequest Success!"};

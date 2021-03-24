@@ -1,8 +1,8 @@
 import { Op } from 'sequelize';
 import {db,PrintRequestsAttributes} from '../db/index';
 
-const requestState = {
-	WAITING: "waiting",
+export const requestState = {
+	WAITING: "pending",
 	PRINTING: "printing",
 	DONE: "done",
 	CANCELLED: "cancelled",

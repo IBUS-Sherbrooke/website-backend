@@ -117,13 +117,14 @@ export const octoPrintService = {
 		
 	},
 
-	async SliceStl(filename:string){
+	async SliceStlAndPrint(filename:string){
 		const stlFileRoute:string = "/files/local/stl/" + filename;
 
 		let payload = {
 			command : 'slice',
 			slicer : 'curalegacy',
-			gcode : `../gcode/${filename.replace('.stl','.gcode')}`
+			gcode : `../gcode/${filename.replace('.stl','.gcode')}`,
+			//print: true
 		};
 
 		try {

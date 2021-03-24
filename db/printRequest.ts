@@ -6,26 +6,25 @@ export interface PrintRequestsAttributes {
 	project_name:number;
 	name:string;
 	status:string;
-	filepath?:string;
+	filepath:string;
 	description?:string;
 }
 
-export function PrintRequestInit(sequelize:Sequelize) {
-	class PrintRequests extends Model<PrintRequestsAttributes> 
+export class PrintRequests extends Model<PrintRequestsAttributes> 
 	implements PrintRequestsAttributes{
 		public user_id!:number;
 		public project_name!:number;
 		public name!:string;
 		public status!:string;
-		public filepath?:string;
+		public filepath!:string;
 		public description?:string;
 		
 		// timestamps
 		public readonly createdAt!: Date;
 		public readonly updatedAt!: Date;
 	}
-	//TODO
 
+export function PrintRequestInit(sequelize:Sequelize) {
 	PrintRequests.init(
 		{
 			name: {
@@ -35,7 +34,7 @@ export function PrintRequestInit(sequelize:Sequelize) {
 			},
 			filepath: {
 				type: DataTypes.STRING(255),
-				allowNull:true
+				allowNull:false
 			},
 			description: {
 				type: DataTypes.STRING(255),
@@ -63,7 +62,5 @@ export function PrintRequestInit(sequelize:Sequelize) {
 			sequelize
 		}
 	);
-
 	return PrintRequests
 }
-
