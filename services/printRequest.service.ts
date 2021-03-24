@@ -44,6 +44,23 @@ export const printRequestService = {
 		}
 	},
 
+	async getPrintRequestsPrinting() {
+		try{
+			let printRequests = await db.PrintRequests.findAll({
+				where:{
+					status: {
+						[Op.or]:[requestState.PRINTING]
+					}
+				},
+				order:[['created_at','ASC']]
+			});
+				
+			return printRequests
+		} catch(e) {
+			throw e
+		}
+	},
+
 	async getPrintRequestsMock() {
 		try{
 			let printRequests = "Le serveur est en train de rouler"
