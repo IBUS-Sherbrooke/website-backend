@@ -1,4 +1,13 @@
+import { Op } from 'sequelize';
 import {db,PrintRequestsAttributes} from '../db/index';
+
+const requestState = {
+	WAITING: "waiting",
+	PRINTING: "printing",
+	DONE: "done",
+	CANCELLED: "cancelled",
+	ERROR: "error"
+}
 
 export const printRequestService = {
 	async getPrintRequests(query:any) {
@@ -12,6 +21,23 @@ export const printRequestService = {
 
 		try{
 			let printRequests = await db.PrintRequests.findAll({where: param})
+			return printRequests
+		} catch(e) {
+			throw e
+		}
+	},
+
+	async getPrintRequestsQueue() {
+		try{
+			let printRequests = await db.PrintRequests.findAll({
+				where:{
+					status: {
+						[Op.or]:[requestState.PRINTING, requestState.WAITING]
+					}
+				},
+				order:[['created_at','ASC']]
+			});
+				
 			return printRequests
 		} catch(e) {
 			throw e

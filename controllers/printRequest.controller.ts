@@ -1,4 +1,3 @@
-import { expression } from "joi"
 import fs, { createReadStream } from 'fs'
 import path from 'path'
 import {printRequestCreate, printRequestUpdateBody, printRequestUpdateQuery, printRequestGetQuery} from '../validators/printRequestValidator'
@@ -76,6 +75,7 @@ export const printRequestController  = {
 
                 let octoUpload_res = await octoPrintService.UploadFile(printData_path);
                 let octo_slice_res = await octoPrintService.SliceStl(stlFileName);
+                
 
                 let msg:responseMessage = {data: createdPrintRequest, message: "CreatePrintRequest Success!"};
                 res.status(200).json(msg);
