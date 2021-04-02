@@ -48,9 +48,7 @@ export const printRequestService = {
 		try{
 			let printRequests = await db.PrintRequests.findAll({
 				where:{
-					status: {
-						[Op.or]:[requestState.PRINTING]
-					}
+					status: requestState.PRINTING
 				},
 				order:[['created_at','ASC']]
 			});

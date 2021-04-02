@@ -1,7 +1,7 @@
 import { workerData, parentPort } from 'worker_threads'
 import {printRequestService, requestState} from './printRequest.service'
 import {octoPrintService} from './octoPrintComm.service'
-import {db,PrintRequests} from '../db'
+import {PrintRequests} from '../db'
 import { worker } from 'cluster'
 
 const pollTimer = function(ms:number){
@@ -21,28 +21,11 @@ async function workerStartup(){
             nextRequest.save();
         }
         //TODO : Start Progress reporting
+        //...
         nextRequest = await printRequests.shift()?.reload();
-    } 
-}
-
-async function workerLoop() {
-    let printRequests = await printRequestService.getPrintRequestsQueue();
-    let nextRequest = printRequests.shift()
-
-    while(true){
-        while(nextRequest == undefined){
-            await pollTimer(60000) //wait 1 minute
-            printRequests = await printRequestService.getPrintRequestsQueue();
-            nextRequest = printRequests.shift()
-        }
-
-        while(nextRequest!=undefined){
-            await workerTask(nextRequest);
-            nextRequest = await printRequests.shift()?.reload()
-        }
     }
+    workerLoop();
 }
-
 
 async function workerTask(nextRequest:PrintRequests){
     nextRequest = await nextRequest.reload();
@@ -74,6 +57,23 @@ async function workerTask(nextRequest:PrintRequests){
     }
 }
 
-workerStartup()
-workerLoop();
+async function workerLoop() {
+    let printRequests = await printRequestService.getPrintRequestsQueue();
+    let nextRequest = printRequests.shift()
 
+    while(true){
+        while(nextRequest == undefined){
+            await pollTimer(60000) //wait 1 minute
+            printRequests = await printRequestService.getPrintRequestsQueue();
+            nextRequest = printRequests.shift()
+        }
+
+        while(nextRequest!=undefined){
+            await workerTask(nextRequest);
+            nextRequest = await printRequests.shift()?.reload()
+        }
+    }
+}
+
+
+workerStartup();

@@ -6,6 +6,7 @@ export interface PrintRequestsAttributes {
 	project_name:number;
 	name:string;
 	status:string;
+	status_message?:string;
 	filepath:string;
 	description?:string;
 }
@@ -16,6 +17,7 @@ export class PrintRequests extends Model<PrintRequestsAttributes>
 		public project_name!:number;
 		public name!:string;
 		public status!:string;
+		public status_message?:string;
 		public filepath!:string;
 		public description?:string;
 		
@@ -43,6 +45,10 @@ export function PrintRequestInit(sequelize:Sequelize) {
 			status: {
 				type: DataTypes.STRING(45),
 				allowNull:false
+			},
+			status_message: {
+				type: DataTypes.STRING(45),
+				allowNull:true
 			},
 			user_id: {
 				type: DataTypes.INTEGER.UNSIGNED,
