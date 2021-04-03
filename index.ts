@@ -17,4 +17,9 @@ app.listen(config.web.port,()=>{
 	console.log(`server running at port ${config.web.port}`)
 })
 
-//const worker = new Worker('./services/printWorker.js');
+/*const worker = new Worker('./services/printWorker.js');
+
+
+worker.on('message', (message:string) =>{
+	print_progress.value = message;
+});*/

@@ -1,12 +1,25 @@
 import { Op } from 'sequelize';
-import {db,PrintRequestsAttributes} from '../db/index';
+import {db,PrintRequestsAttributes,PrintRequests} from '../db/index';
+import {octoPrintService,JobInformation} from './octoPrintComm.service'
 
-export const requestState = {
+export const printState = {
 	WAITING: "pending",
 	PRINTING: "printing",
 	DONE: "done",
 	CANCELLED: "cancelled",
 	ERROR: "error"
+}
+
+declare interface JobProgress {
+	user_id:number,
+	project_name:string,
+	name:string
+	progress:JobInformation
+}
+
+declare interface PrintRequestAndProgress{
+	printrequests:PrintRequests[],
+	jobsProgress?: JobProgress[]
 }
 
 export const printRequestService = {
@@ -20,8 +33,27 @@ export const printRequestService = {
 		}
 
 		try{
-			let printRequests = await db.PrintRequests.findAll({where: param})
-			return printRequests
+			let printRequestsAndProgress:PrintRequestAndProgress = {
+				printrequests: await db.PrintRequests.findAll({where: param}),
+			} 
+
+			let jobsProgress:JobProgress[] = [];
+			//TODO: SUPPORT MULTIPLE PRINTERS. right now it always fetches the same job on the same printer, but we only have 1 printer
+			printRequestsAndProgress.printrequests.forEach(async printEntry => {
+				if(printEntry.status == printState.PRINTING){
+					let jobprogress:JobProgress = {
+						user_id: printEntry.user_id,
+						project_name: printEntry.project_name,
+						name:printEntry.name,
+						progress: await octoPrintService.GetJobStatus()
+					}
+					jobsProgress.push(jobprogress)
+				}
+			});
+
+			printRequestsAndProgress.jobsProgress = jobsProgress;
+
+			return printRequestsAndProgress
 		} catch(e) {
 			throw e
 		}
@@ -32,7 +64,7 @@ export const printRequestService = {
 			let printRequests = await db.PrintRequests.findAll({
 				where:{
 					status: {
-						[Op.or]:[requestState.PRINTING, requestState.WAITING]
+						[Op.or]:[printState.PRINTING, printState.WAITING]
 					}
 				},
 				order:[['created_at','ASC']]
@@ -48,7 +80,7 @@ export const printRequestService = {
 		try{
 			let printRequests = await db.PrintRequests.findAll({
 				where:{
-					status: requestState.PRINTING
+					status: printState.PRINTING
 				},
 				order:[['created_at','ASC']]
 			});

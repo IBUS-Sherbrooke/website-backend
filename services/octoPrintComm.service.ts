@@ -14,22 +14,8 @@ const axinstance = axios.create({
     maxBodyLength: Infinity,
 })
 
-/*interface GetFilesResponse {
-	files:{
-		date:number;
-		display:string;
-		name:string;
-		origin:string;
-		path:string;
-		size:number;
-		type:string;
-		refs:{
-			download:string;
-			resource:string;
-		};
-}*/
 
-declare interface JobInformation {
+export declare interface JobInformation {
 	job: {
 		file: {
 		  name: string,

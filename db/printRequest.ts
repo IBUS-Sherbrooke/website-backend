@@ -3,7 +3,7 @@ import {Model, DataTypes, Sequelize} from 'sequelize'
 
 export interface PrintRequestsAttributes {
 	user_id:number;
-	project_name:number;
+	project_name:string;
 	name:string;
 	status:string;
 	status_message?:string;
@@ -14,7 +14,7 @@ export interface PrintRequestsAttributes {
 export class PrintRequests extends Model<PrintRequestsAttributes> 
 	implements PrintRequestsAttributes{
 		public user_id!:number;
-		public project_name!:number;
+		public project_name!:string;
 		public name!:string;
 		public status!:string;
 		public status_message?:string;

@@ -1,5 +1,5 @@
 import { workerData, parentPort } from 'worker_threads'
-import {printRequestService, requestState} from './printRequest.service'
+import {printRequestService, printState} from './printRequest.service'
 import {octoPrintService} from './octoPrintComm.service'
 import {PrintRequests} from '../db'
 import { worker } from 'cluster'
@@ -15,7 +15,7 @@ async function workerStartup(){
     while(nextRequest != undefined){
         let job = await octoPrintService.GetJobStatus();
 
-        if(job.state != requestState.PRINTING){
+        if(job.state != printState.PRINTING){
             nextRequest.status = job.state;
             //TODO: save the data message too (need another column in database)
             nextRequest.save();
@@ -30,7 +30,7 @@ async function workerStartup(){
 async function workerTask(nextRequest:PrintRequests){
     nextRequest = await nextRequest.reload();
 
-    if(nextRequest.status != requestState.WAITING){
+    if(nextRequest.status != printState.WAITING){
         return
     }
 
@@ -44,11 +44,11 @@ async function workerTask(nextRequest:PrintRequests){
 
         try {
             octoPrintService.SliceStlAndPrint(nextRequest.filepath);
-            nextRequest.status = requestState.PRINTING;             //maybe move in Progress reporting but needs to be done before exiting function
+            nextRequest.status = printState.PRINTING;             //maybe move in Progress reporting but needs to be done before exiting function
             nextRequest.save();
             //TODO: save the data message too (need another column in database)
         } catch (error) {
-            nextRequest.status = requestState.ERROR;
+            nextRequest.status = printState.ERROR;
             nextRequest.save();
             //TODO: save the data message too (need another column in database)
         }
