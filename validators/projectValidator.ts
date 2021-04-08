@@ -3,7 +3,7 @@ import Joi from 'joi'
 
 export var projectGetQuery = Joi.object({
 	user_id: Joi.number().integer().min(1).required(),
-	name: Joi.string().required(),
+	name: Joi.string(),
 })
 
 export var projectCreate = Joi.object({

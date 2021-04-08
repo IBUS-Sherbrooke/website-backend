@@ -30,14 +30,14 @@ export declare interface JobInformation {
 			volume: number
 		  }
 		}
-	  },
-	  progress: {
+	},
+	progress: {
 		completion: number,
 		filepos: number,
 		printTime: number,
 		printTimeLeft: number
-	  },
-	  state: string
+	},
+	state: string
 }
 
 declare interface PrinterInformation {
