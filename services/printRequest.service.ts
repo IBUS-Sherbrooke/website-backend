@@ -1,4 +1,4 @@
-import { Op } from 'sequelize';
+import {Op } from 'sequelize';
 import {db,PrintRequestsAttributes,PrintRequests} from '../db/index';
 import {octoPrintService,JobInformation} from './octoPrintComm.service'
 
@@ -47,6 +47,17 @@ export const printRequestService = {
 						name:printEntry.name,
 						progress: await octoPrintService.GetJobStatus()
 					}
+
+					//save state if Done or ERROR
+					if(jobprogress.progress.state == printState.ERROR){
+						let status_data:string = JSON.stringify({status_message:jobprogress.progress});
+						this.updatePrintRequest(jobprogress.user_id,jobprogress.project_name,jobprogress.name,status_data);
+					}
+					else if (jobprogress.progress.state == "Operational") {
+						let status:string = JSON.stringify({status:printState.DONE});
+						this.updatePrintRequest(jobprogress.user_id,jobprogress.project_name,jobprogress.name,status);
+					}
+
 					jobsProgress.push(jobprogress)
 				}
 			});
