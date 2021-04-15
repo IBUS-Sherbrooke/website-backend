@@ -57,6 +57,7 @@ export const printRequestController  = {
             const tmp_filepath:string = path.join(tmp_session.path,req.file.filename);
             //rename for unique file
             req.body.name = path.basename(req.body.name,'.stl') + '-' + Date.now();
+            req.body.filepath = req.body.name + '.stl'
 
             /* validate input */
             let inputIsValid = await printRequestCreate.validate(req.body);

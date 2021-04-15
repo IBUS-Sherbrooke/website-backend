@@ -46,6 +46,7 @@ export class tmpSession {
 		if(tmpDir){
 			this.path = tmpDir;
 		}
+		fs.mkdirSync(this.path, { recursive: true })
 	}
 	
 	cleanSession(){

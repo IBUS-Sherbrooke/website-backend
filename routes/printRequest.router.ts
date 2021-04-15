@@ -1,7 +1,8 @@
 import express from 'express';
 import {printRequestController} from '../controllers/printRequest.controller';
 import multer from 'multer'
-import {tmpSession} from '../services/fsStore';
+import {fsStore, tmpSession} from '../services/fsStore';
+import fs, { createReadStream } from 'fs'
 
 const printRequestRouter = express.Router()
 
@@ -11,7 +12,7 @@ var storage = multer.diskStorage({
 		cb(null, tmp_session.path)
 	},
 	filename: function(req, file, cb) {
-		cb(null, '-' + Date.now() + file.originalname)
+		cb(null, file.originalname + '-' + Date.now())
 	}
 })
 var upload = multer({storage:storage})

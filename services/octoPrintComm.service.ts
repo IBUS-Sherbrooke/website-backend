@@ -75,7 +75,7 @@ export const octoPrintService = {
 		formData.append('file',fs.readFileSync(fullpath),fullpath);
 		formData.append('path','/stl')
 		//formData.append('select', 'false');
-		//formData.append('print','false');	
+		formData.append('print','false');	
 		
 		try {
 			let res = await axinstance.post(uploadFileRoute,formData.getBuffer(), {
@@ -83,7 +83,7 @@ export const octoPrintService = {
 					...formData.getHeaders()
 				}
 			});
-
+			console.log(res.data)
 			return res.data;
 		}catch (e) {
 			console.log(e)
