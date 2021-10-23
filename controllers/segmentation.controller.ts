@@ -5,42 +5,29 @@ import {printRequestService} from '../services/printRequest.service'
 import {octoPrintService} from '../services/octoPrintComm.service'
 import {responseMessage} from './responses'
 import {tmpSession, fsStore} from '../services/fsStore'
+const { execFile } = require('child_process');
+
 
 
 export const segmentationController  = {
- 
+
     /* get printRequests */
-    async getSegmentation(req:any, res:any) {
+    async postSegmentation(req:any, res:any) {
         if(!req.file){
             let msg:responseMessage = {message: "addPrintRequests Failed : needs a file"}
             res.status(400).json(msg);
             return
         }
-        let tmp_session:tmpSession = new tmpSession(req.file.destination)
-        
-        try {
-            const tmp_filepath:string = path.join(tmp_session.path,req.file.filename);
-            //rename for unique file
-            req.body.name = path.basename(req.body.name,'.dcm') + '-' + Date.now();
-            req.body.filepath = req.body.name + '.dcm'
-            /* validate input */
-            let inputIsValid = await printRequestCreate.validate(req.body);
- 
-            if(inputIsValid.error){
-                let msg:responseMessage = {data: inputIsValid.error.details[0].message, message: "addPrintRequests Failed : body is invalid"};
-                res.status(400).json(msg);
-            } else {
-                req.body.status = "pending";
-            }
-        } catch (e) {
-            let msg:responseMessage = {data: e, message: "addPrintRequests Failed"};
-            res.status(400).json(msg);
-        } finally {
-            tmp_session.cleanSession();
-        }
-
-        let msg:responseMessage = {data: "Success", message: "getPrintRequests Success!"}
-
+        var exec = require('child_process').execFile
+        console.log("Starting segmentation")
+        exec('./segmentation/ConnectedThresholdImageFilter.exe',["./segmentation/brain_019.dcm", "./segmentation/abc.png", "100", "100", "400" ,"800"], { cwd: '.' }, function(err: any, data: any) {  
+            let tmp_session:tmpSession = new tmpSession(req.file.destination)
+                const tmp_filepath:string = path.join(tmp_session.path,req.file.filename);
+            console.log("Finished segmentation")
+            let msg:responseMessage = {data: "Success", message: "getPrintRequests Success!"}
+            res.status(200).json(msg)
+        })
+       
 
         // try {
         //     let queryIsValid = await printRequestGetQuery.validate(req.query)
