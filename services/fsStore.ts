@@ -24,7 +24,14 @@ export const fsStore = {
 	deleteProject(user_id:string, project_name:string) {
 		fs.rmSync(path.join(rootDir,user_id,project_name), { recursive: true });
 	},
+	saveFileData(tmp_filepath:string,user_id:string, project_name:string, printName:string) {
+		let file_dir:string = path.join(rootDir, user_id, project_name);
+		fs.mkdirSync(file_dir, { recursive: true });
+		let save_file_path:string = path.join(file_dir, printName);
+		fs.renameSync(tmp_filepath, save_file_path);
 
+		return save_file_path;
+	},
 	savePrintData(tmp_filepath:string,user_id:string, project_name:string, printName:string) {
 		let file_dir:string = path.join(rootDir, user_id, project_name);
 		fs.mkdirSync(file_dir, { recursive: true });

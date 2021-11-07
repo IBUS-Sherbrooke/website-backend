@@ -17,7 +17,7 @@ var storage = multer.diskStorage({
 })
 var upload = multer({storage:storage})
 
-segmentationRouter.post('/',upload.single('print_data'),segmentationController.postSegmentation)
+segmentationRouter.post('/',upload.any(),segmentationController.postSegmentation)
 
 
 
