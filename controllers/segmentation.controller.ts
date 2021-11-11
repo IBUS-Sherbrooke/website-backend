@@ -15,7 +15,7 @@ export const segmentationController  = {
         let tmp_filepath:string
         let tmp_session:tmpSession
         let file
-        let printData_path = []
+        let printData_path
         console.log(req.files)
         let dicom_directory=req.body.project_name+"/dcm_folder/"
         for (var i = 0; i < req.files.length; i++) {  
@@ -24,48 +24,19 @@ export const segmentationController  = {
         tmp_filepath = path.join(tmp_session.path,file.filename);
         //rename for unique file
         let stlFileName =file.filename + '.dcm';
-        printData_path.push(fsStore.savePrintData(tmp_filepath,req.body.user_id, dicom_directory, stlFileName))
-        
+        printData_path=fsStore.saveFileData(tmp_filepath,req.body.user_id, dicom_directory, stlFileName)
         console.log(printData_path)
         }
         
-        console.log(req.body)
-        console.log(req.body.print_data);
-        console.log(Object.keys(req.body))
 
-       // var buf = Buffer.from(req.body.print_data, 'base64');
-       // console.log(buf.toJSON())
-       // fs.writeFile("./test.dcm", buf, function(err) {
-        //    if(err) {
-        //      console.log("err", err);
-        //    } else {
-        //      return res.json({'status': 'success'});
-        //    }
-       //   }); 
-
-        //const obj = JSON.parse("./test.dcm")
-        //console.log(obj)
-      //  let formData:FormData = new FormData();
-		//formData.append('file',fs.readFileSync(fullpath),fullpath);
-		//formData.append('path','/stl')
-		//formData.append('select', 'false');
-	//	formData.append('print','false');	
-
-    //var dataSet = dicom.parseDicom(req.file);
-      //  console.log(typeof dataSet)
-      //  var pixelData = new Uint8Array(dataSet.byteArray.buffer, 
-      //      dataSet.elements.x00880200.items[0].dataSet.elements.x7fe00010.dataOffset, 
-     //       dataSet.elements.x00880200.items[0].dataSet.elements.x7fe00010.length);
-      // fs.writeFileSync('temp_segmentation.dcm', req.print_data);
-      //  fs.writeFile("temp_segmentation", req.file, function (err) {
-      //  console.log(err);
-      //  })
         var exec = require('child_process').execFile
         console.log("Starting segmentation")
-        exec('./segmentation/ConnectedThresholdImageFilter.exe',["./segmentation/brain_019.dcm", "./segmentation/abc.png", "100", "100", "400" ,"800"], { cwd: '.' }, function(err: any, data: any) {  
+        // Executable, Folder dicom, output folder name, x, y, z, lower threshold, upper threshole
+        console.log(printData_path)
+        exec('./segmentation/ConnectedThresholdImageFilter.exe',[printData_path, "./segmentation/segmentation_output.nrrd", "100", "100","5", "400" ,"800"], { cwd: '.' }, function(err: any, data: any) {  
             console.log("Finished segmentation")
             let msg:responseMessage = {data: "Success", message: "getPrintRequests Success!"}
-            res.sendFile("abc.png", { root: './segmentation/' });
+            res.sendFile("segmentation_output.nrrd", { root: './segmentation/' });
            // res.status(200).json(msg)
             
         })
