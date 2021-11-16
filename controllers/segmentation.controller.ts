@@ -16,8 +16,20 @@ export const segmentationController  = {
         let tmp_session:tmpSession
         let file
         let printData_path
-        console.log(req.files)
+        
         let dicom_directory=req.body.project_name+"/dcm_folder/"
+        let file_path= "uploads/"+req.body.user_id+"/"+req.body.project_name+"/dcm_folder/"
+        console.log("File received, emptying directory")
+        fs.readdir(file_path, (err, files) => {
+            if (err) throw err;
+          
+            for (const file of files) {
+              fs.unlink(path.join(file_path, file), err => {
+                if (err) throw err;
+              });
+            }
+          });
+        console.log("Saving file to work directory")
         for (var i = 0; i < req.files.length; i++) {  
         file=req.files[i]
         tmp_session = new tmpSession(file.destination)
@@ -25,15 +37,15 @@ export const segmentationController  = {
         //rename for unique file
         let stlFileName =file.filename + '.dcm';
         printData_path=fsStore.saveFileData(tmp_filepath,req.body.user_id, dicom_directory, stlFileName)
-        console.log(printData_path)
         }
         
 
         var exec = require('child_process').execFile
+        console.log("File received and saved")
         console.log("Starting segmentation")
-        // Executable, Folder dicom, output folder name, x, y, z, lower threshold, upper threshole
+        // Executable, Folder dicom, output folder name, x, y, z, lower threshold, upper threshold
         console.log(printData_path)
-        exec('./segmentation/ConnectedThresholdImageFilter.exe',[printData_path, "./segmentation/segmentation_output.nrrd", "100", "100","5", "400" ,"800"], { cwd: '.' }, function(err: any, data: any) {  
+        exec('./segmentation/ConnectedThresholdImageFilter.exe',[printData_path, "./segmentation/segmentation_output.nrrd", "112", "330","45", "900" ,"5000"], { cwd: '.' }, function(err: any, data: any) {  
             console.log("Finished segmentation")
             let msg:responseMessage = {data: "Success", message: "getPrintRequests Success!"}
             res.sendFile("segmentation_output.nrrd", { root: './segmentation/' });
