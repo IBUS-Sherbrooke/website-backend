@@ -49,7 +49,7 @@ export const segmentationController  = {
             console.log("Finished segmentation")
             let msg:responseMessage = {data: "Success", message: "getPrintRequests Success!"}
             res.sendFile("segmentation_output.nrrd", { root: './segmentation/' });
-           // res.status(200).json(msg)
+            console.log("Response sent")
             
         })
        
