@@ -6,7 +6,6 @@ import {octoPrintService} from '../services/octoPrintComm.service'
 import {responseMessage} from './responses'
 import {tmpSession, fsStore} from '../services/fsStore'
 const { execFile } = require('child_process');
-var dicom = require('dicom-parser');
 
 
 export const segmentationController  = {
