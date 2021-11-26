@@ -38,14 +38,17 @@ export const segmentationController  = {
         let stlFileName =file.filename + '.dcm';
         printData_path=fsStore.saveFileData(tmp_filepath,req.body.user_id, dicom_directory, stlFileName)
         }
-        
+        console.log(req)
 
         var exec = require('child_process').execFile
         console.log("File received and saved")
         console.log("Starting segmentation")
         // Executable, Folder dicom, output folder name, x, y, z, lower threshold, upper threshold
         console.log(printData_path)
-        exec('./segmentation/ConnectedThresholdImageFilter.exe',[printData_path, "./segmentation/segmentation_output.nrrd", "112", "330","45", "900" ,"5000"], { cwd: '.' }, function(err: any, data: any) {  
+        console.log("x:  ",req.body.x)
+        console.log("y:  ",req.body.y)
+        console.log("z:  ",req.body.z)
+        exec('./segmentation/ConnectedThresholdImageFilter.exe',[printData_path, "./segmentation/segmentation_output.nrrd", req.body.x, req.body.y,req.body.z, "900" ,"5000"], { cwd: '.' }, function(err: any, data: any) {  
             console.log("Finished segmentation")
             let msg:responseMessage = {data: "Success", message: "getPrintRequests Success!"}
             res.sendFile("segmentation_output.nrrd", { root: './segmentation/' });
